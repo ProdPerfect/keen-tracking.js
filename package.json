@@ -11,6 +11,7 @@
   },
   "scripts": {
     "start": "NODE_ENV=development webpack-dev-server",
+    "heroku:start": "NODE_ENV=production webpack -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 webpack -p && npm run build:node && node_modules/.bin/static dist --port ${PORT}",
     "test": "NODE_ENV=test jest && NODE_ENV=test TEST_ENV=node jest",
     "test:watch": "NODE_ENV=test jest --watch",
     "test:node:watch": "NODE_ENV=test TEST_ENV=node jest --watch",
@@ -38,7 +39,8 @@
   "dependencies": {
     "component-emitter": "^1.2.0",
     "js-cookie": "2.1.0",
-    "keen-core": "^0.1.3"
+    "keen-core": "^0.1.3",
+    "node-static": "^0.7.10"
   },
   "devDependencies": {
     "babel-loader": "^7.1.4",
