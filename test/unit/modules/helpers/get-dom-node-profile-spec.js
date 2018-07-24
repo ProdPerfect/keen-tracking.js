@@ -10,8 +10,8 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
   elP.setAttribute('ng-model', 'ngModelAttr');
   elP.setAttribute('title', 'myTitle');
   elP.name = 'testEl';
-  elP.text ='myText';
-  elP.textContent ='myTextContent';
+  elP.text = 'myText';
+  elP.textContent = 'myTextContent';
   elP.style.cursor = 'pointer';
 
   const expectedP = {
@@ -108,7 +108,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
     expect(getDomNodeProfile(elP, {
       recordTextContent: true,
       redactTextContent: true
-    }).text_content).toEqual('---REDACTED---');
+    }).textContent).toEqual('---REDACTED---');
   });
 
   test('should return relevant properties of the passed a tag, without textContent when not requested', () => {

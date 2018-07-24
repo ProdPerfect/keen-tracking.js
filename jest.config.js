@@ -17,5 +17,6 @@ module.exports = {
   },
   transformIgnorePatterns: [
     "node_modules/(?!promise-polyfill|whatwg-fetch)/"
-  ]
+  ],
+  testURL: 'http://localhost'
 };
