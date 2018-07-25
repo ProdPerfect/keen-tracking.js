@@ -1,6 +1,6 @@
 {
   "name": "prodperfect-keen-tracking",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "upstreamVersion": "2.0.1",
   "description": "ProdPerfect fork of the Data Collection SDK for Keen IO",
   "main": "dist/node/keen-tracking.js",
