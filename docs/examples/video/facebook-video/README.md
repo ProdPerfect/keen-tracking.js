@@ -10,7 +10,7 @@ Install the library synchronously and configure a new `client` instance to captu
 <html>
 <head>
   <meta charset="utf-8">
-  <script src="https://d26b395fwzu5fz.cloudfront.net/keen-tracking-2.0.1.js"></script>
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/keen-tracking@4"></script>
 </head>
 <body>
   <!-- Facebook SDK and embedded video player code -->
@@ -23,13 +23,13 @@ Install the library synchronously and configure a new `client` instance to captu
   <script>
   var FACEBOOK_VIDEO_APP_ID = 'YOUR_FB_APP_ID';
 
-  var client = new Keen({
+  var client = new KeenTracking({
     projectId: 'YOUR_PROJECT_ID',
     writeKey: 'YOUR_WRITE_KEY'
   });
 
   // Optional debug mode
-  Keen.debug = true;
+  KeenTracking.debug = true;
   client.on('recordEvent', Keen.log);
 
   // Track a 'pageview' event and initialize auto-tracking data model
