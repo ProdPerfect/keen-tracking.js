@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
-<head></head>
+<head>
+<title>Tracking test demo</title>
 <meta charset="utf-8">
+</head>
 <body>
-  <script src="demo-config.js"></script>
+  <a href="?x=1">Link1</a>
+  <a href="?x=2">Link2</a>
   <script src="demo-tests.js"></script>
   <script>
     const file = 'keen-tracking.js';
@@ -13,11 +16,11 @@
     }
     !function(name,path,ctx){
       let latest,prev=name!=="Keen"&&window.Keen?window.Keen:false;ctx[name]=ctx[name]||{ready:function(fn){var h=document.getElementsByTagName("head")[0],s=document.createElement("script"),w=window,loaded;s.onload=s.onreadystatechange=function(){if((s.readyState&&!(/^c|loade/.test(s.readyState)))||loaded){return}s.onload=s.onreadystatechange=null;loaded=1;latest=w.Keen;if(prev){w.Keen=prev}else{try{delete w.Keen}catch(e){w.Keen=void 0}}ctx[name]=latest;ctx[name].ready(fn)};s.async=1;s.src=path;h.parentNode.insertBefore(s,h)}}
-    }("Keen", `${path}${file}`,this);
+    }("KeenTracking", `${path}${file}`,this);
   </script>
   <script>
-    Keen.ready(function(){
-      demoTests(demoConfig, Keen);
+    KeenTracking.ready(function(){
+      demoTests(keenGlobals.demoConfig, KeenTracking);
     });
 	</script>
 </body>

@@ -6,8 +6,12 @@
 .awspublish-keen-js
 
 bower.json
-gulpfile.js
-karma.conf.js
+.babelrc
+test
+.travis.yml
+jest.config.js
+webpack.config.js
+.eslintrc
 
 bower_components
 docs

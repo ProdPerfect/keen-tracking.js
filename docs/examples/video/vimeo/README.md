@@ -10,7 +10,7 @@ Install the library synchronously and configure a new `client` instance to captu
 <html>
 <head>
   <meta charset="utf-8">
-  <script src="https://d26b395fwzu5fz.cloudfront.net/keen-tracking-2.0.1.js"></script>
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/keen-tracking@4"></script>
   <script src="https://player.vimeo.com/api/player.js"></script>
 </head>
 <body>
@@ -23,18 +23,18 @@ Install the library synchronously and configure a new `client` instance to captu
           allowfullscreen></iframe>
 
   <script>
-  Keen.ready(function() {
+  KeenTracking.ready(function() {
     var iframe = document.querySelector('#vimeo-player');
     var player = new Vimeo.Player(iframe);
 
-    var client = new Keen({
+    var client = new KeenTracking({
       projectId: 'YOUR_PROJECT_ID',
       writeKey: 'YOUR_WRITE_KEY'
     });
     var extend = Keen.utils.extend;
 
     // Optional debug mode
-    Keen.debug = true;
+    KeenTracking.debug = true;
     client.on('recordEvent', Keen.log);
 
     // Track a 'pageview' event and initialize auto-tracking data model

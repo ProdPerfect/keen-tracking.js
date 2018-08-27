@@ -2,7 +2,16 @@ const path = require('path');
 const webpack = require('webpack');
 
 const fileName = 'keen-tracking';
-const entry = ( process.env.TARGET !== 'node' ) ? './lib/browser.js' : './lib/server.js' ;
+const entry = ( process.env.TARGET !== 'node' ) ? [ './lib/browser.js'] : './lib/server.js' ;
+const alias = ( process.env.TARGET !== 'node' ) ? [] : {'./cache-browser' : './cache-node'};
+
+let definePluginVars = {};
+if (process.env.NODE_ENV === 'development') {
+  const demoConfig = require('../demo-config');
+  definePluginVars = {
+    webpackKeenGlobals: JSON.stringify({ demoConfig })
+  };
+}
 
 module.exports = {
   entry,
@@ -49,6 +58,7 @@ module.exports = {
       'node_modules',
     ],
     extensions: ['.js', '.json', '.jsx', '.css', '.scss'],
+    alias
   },
 
   optimization: {
@@ -61,7 +71,9 @@ module.exports = {
 
   // stats: 'verbose',
 
-  plugins: [],
+  plugins: [
+    new webpack.DefinePlugin(definePluginVars)
+  ],
 
   mode: process.env.NODE_ENV,
 
@@ -77,6 +89,8 @@ module.exports = {
     'component-emitter' : 'component-emitter',
     'js-cookie' : 'js-cookie',
     'keen-core' : 'keen-core',
+    'whatwg-fetch': 'whatwg-fetch',
+    'promise-polyfill': 'promise-polyfill'
   } : {
   },
 
