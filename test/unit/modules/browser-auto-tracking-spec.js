@@ -15,19 +15,33 @@ describe('Auto Tracking', () => {
     writeKey: 'bb',
     requestType: 'beaconAPI'
   };
+  const prodperfectTestData = {
+    'test': '1',
+    'test_run_id': '1'
+  }
 
   beforeEach(() => {
     client = new KeenTracking(config);
+    const cookie = KeenTracking.utils.cookie('prodperfect_test');
+    cookie.set('test_run_data', prodperfectTestData);
+
     client.on('recordEvent', mockFn1);
     mockFn1.mockClear();
     client.initAutoTracking();
   });
 
   const extendedParams = {
+    event_uuid: expect.any(String),
     geo: expect.any(Object),
-    ip_address: "${keen.ip}",
     tracked_by: pkg.name + '-' + pkg.version,
+    iso_time_full: expect.any(String),
     local_time_full: expect.any(String),
+    session: {
+      session_uuid: expect.any(String)
+    },
+    tracker_load_uuid: expect.any(String),
+    tracker_loaded_at: expect.any(String),
+    prodperfect_test_data: prodperfectTestData,
     user: {
       uuid: expect.any(String),
     },
@@ -107,9 +121,17 @@ describe('Auto Tracking', () => {
   };
 
   const extendedParamsClick = {
+    event_uuid: expect.any(String),
     geo: expect.any(Object),
     tracked_by: pkg.name + '-' + pkg.version,
+    iso_time_full: expect.any(String),
     local_time_full: expect.any(String),
+    session: {
+      session_uuid: expect.any(String)
+    },
+    tracker_load_uuid: expect.any(String),
+    tracker_loaded_at: expect.any(String),
+    prodperfect_test_data: prodperfectTestData,
     user: {
       uuid: expect.any(String),
     },
@@ -187,11 +209,18 @@ describe('Auto Tracking', () => {
       ],
     },
     element: expect.any(Object),
-    local_time_full: expect.any(String),
     page: expect.any(Object)
   };
 
   const extendedParamsForm = {
+    event_uuid: expect.any(String),
+    iso_time_full: expect.any(String),
+    session: {
+      session_uuid: expect.any(String)
+    },
+    tracker_load_uuid: expect.any(String),
+    tracker_loaded_at: expect.any(String),
+    prodperfect_test_data: prodperfectTestData,
     geo: expect.any(Object),
     ip_address: "${keen.ip}",
     tracked_by: pkg.name + '-' + pkg.version,
@@ -271,13 +300,12 @@ describe('Auto Tracking', () => {
       ],
     },
     element: expect.any(Object),
-    local_time_full: expect.any(String),
     page: expect.any(Object),
     form: {
       action: '/',
       method: 'get',
       fields: {
-        email: 'team@keen.io',
+        email: '---REDACTED---',
         password: undefined
       }
     }
@@ -352,11 +380,10 @@ describe('Auto Tracking', () => {
     expect(uuid.length).toBeGreaterThan(0);
   });
 
-  it('should create cookie with UUID', () => {
-    const cookie = KeenTracking.utils.cookie('keen');
-    const uuid = cookie.get('uuid');
-    expect(uuid).not.toBe(null);
-    expect(uuid.length).toBeGreaterThan(0);
+  it('should create cookie with session UUID', () => {
+    const cookie = KeenTracking.utils.cookie('prodperfect_session');
+    const session_uuid = cookie.get('session_uuid');
+    expect(session_uuid).not.toBe(null);
+    expect(session_uuid.length).toBeGreaterThan(0);
   });
-
 });
