@@ -1,4 +1,4 @@
-readonly DISTRIBUTION_ID="E2VZR8TOC61OQY";
+readonly DISTRIBUTION_ID="E3CL6P6NHSXGR6";
 readonly MIN_FILE="keen-tracking.min.js";
 
 while true; do
@@ -13,14 +13,14 @@ done
 if aws --version &> /dev/null
 then
   echo "rolling back canary";
-  aws s3 cp "s3://prodperfect-keen-js/${MIN_FILE}" "s3://prodperfect-keen-js/keen-tracking_canary.min.js" --region us-east-2 --acl public-read
+  aws s3 cp "s3://wespire-tracking-library/keen-tracking_last.min.js" "s3://wespire-tracking-library/${MIN_FILE}" --region us-east-2 --acl public-read
 else
   echo "please install AWS CLI";
   exit 1;
 fi;
 
 echo "invalidating canary cloudfront cache";
-invalidation_id=$(aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/keen-tracking_canary.min.js" | egrep Id | awk -F'"' '{ print $4}' )
+invalidation_id=$(aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/${MIN_FILE}" | egrep Id | awk -F'"' '{ print $4}' )
 
 echo "waiting for cloudfront invalidation to complete...";
 aws cloudfront wait invalidation-completed --distribution-id $DISTRIBUTION_ID --id $invalidation_id
