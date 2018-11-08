@@ -60,9 +60,7 @@ test.requestHooks(logger)('0 Pageview', async t => {
   await t.eval(script_loader_function(localTesting, betaTesting));
   await t.wait(2000);
 
-  await t
-    .expect(logger.requests.length).eql(1)
-    .expect(await logger.count((record) => /pageviews/.test(record.request.url) && record.response.statusCode == 201)).eql(1);
+  await t.expect(logger.requests.length).eql(0)
 });
 
 test.requestHooks(logger)('1 Click', async t => {
