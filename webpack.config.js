@@ -27,8 +27,9 @@ module.exports = {
     }${
       process.env.OPTIMIZE_MINIMIZE ? '.min' : ''
     }.js`,
-    library: `${!process.env.LIBRARY ? '' : process.env.LIBRARY}`,
-    libraryTarget: 'umd',
+    library: 'Keen',
+    libraryExport: 'default',
+    libraryTarget: 'var',
   },
 
   module: {
