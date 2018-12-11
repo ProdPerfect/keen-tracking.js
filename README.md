@@ -450,20 +450,6 @@ This is an open source project and we love involvement from the community! Hit u
 
 ---
 
-### ProdPerfect Build Scripts
-
-Follow these steps when building and deploying the script:
-
-1. run `npm run test:regression` to build the `/dist` files and confirm tests pass locally
-2. Commit all changes and run `npm run build:dev`. This will copy your local `min.js` file to s3, invalidate cloudfront, and push your changes to the checked out branch
-3. After getting code review approval and tests passing on Semaphore, merge your changes into master
-4. Check out master locally and run `npm run deploy:beta`. This will copy your `min.js` file to a "canary" file on s3 for user testing
-5. After satisfied with the "canary" test, run `npm run deploy:production`. This copies the current `min.js` file on s3 to a `last` file for rolling back, and copies the "canary" file to the main `min.js`
-
-If things go wrong:
-- To rollback a bad beta/canary build, run `npm run rollback:beta`
-- To rollback a bad production build, run `npm run rollback:production`
-
 ### Support
 
 Need a hand with something? Shoot us an email at [team@keen.io](mailto:team@keen.io). We're always happy to help, or just hear what you're building! Here are a few other resources worth checking out:
