@@ -2362,7 +2362,7 @@ function send(_ref) {
   var requestType = configObject.requestType // specific method for one request
   || this.config.requestType; // global request type of client
 
-  if (navigator && navigator.sendBeacon && (requestType === 'beaconAPI' || requestType === 'beacon')
+  if (navigator && navigator.sendBeacon && requestType === 'beaconAPI' || requestType === 'beacon'
   // so you can send specific recordEvent() using beaconAPI
   // even if your global client's config prefers Fetch
   ) {
