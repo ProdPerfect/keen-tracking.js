@@ -4,7 +4,14 @@ import { v4 } from 'uuid';
 
 let testSuiteRunId = undefined;
 const getLocation = ClientFunction(() => document.location.href);
-const script_loader_function = return new Function(fs.readFileSync('./test/testcafe/test-snippet-local.js', { encoding: "utf8" }));
+
+const keenMin = fs.readFileSync('./dist/keen-tracking.min.js', {encoding: 'utf8'});
+const trackingSnippet = fs.readFileSync('./test/testcafe/test-snippet-local.js', {encoding: 'utf8'});
+
+const script_loader_function = new Function(`
+${keenMin}
+${trackingSnippet}
+`);
 
 const setProdPerfectCookie = ClientFunction( (id, name, testSuiteRunId, env) => {
   const data = {
