@@ -9,6 +9,7 @@ node_modules/.bin/testcafe 'browserstack:edge@17.0:Windows 10' test/testcafe/reg
 
 node_modules/.bin/testcafe 'browserstack:chrome:Windows 8.1' test/testcafe/regression-tests.js;
 node_modules/.bin/testcafe 'browserstack:firefox:Windows 8.1' test/testcafe/regression-tests.js;
+node_modules/.bin/testcafe 'browserstack:ie@11.0:Windows 8.1' test/testcafe/regression-tests.js;
 node_modules/.bin/testcafe 'browserstack:ie@11.0:Windows 8.1' test/testcafe/shits-not-on-fire-tests.js;
 
 node_modules/.bin/testcafe 'browserstack:chrome:Windows 8' test/testcafe/regression-tests.js

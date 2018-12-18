@@ -1,23 +1,11 @@
-import minimist from 'minimist';
 import {ClientFunction, RequestLogger, Selector} from 'testcafe';
 import fs from 'fs';
 import { v4 } from 'uuid';
 
-const args = minimist(process.argv.slice(2));
-const localTesting = args.local ? true : false;
-const betaTesting = args.beta ? true : false;
-
 let testSuiteRunId = undefined;
 const getLocation = ClientFunction(() => document.location.href);
-const script_loader_function = (localTesting, betaTesting) => {
-  if (localTesting) {
-    return new Function(fs.readFileSync('./test/testcafe/test-snippet-local.js').toString());
-  } else if (betaTesting) {
-    return new Function(fs.readFileSync('./test/testcafe/test-snippet-beta.js').toString());
-  } else {
-    return new Function(fs.readFileSync('./test/testcafe/test-snippet-prod.js').toString());
-  }
-};
+const script_loader_function = return new Function(fs.readFileSync('./test/testcafe/test-snippet-local.js', { encoding: "utf8" }));
+
 const setProdPerfectCookie = ClientFunction( (id, name, testSuiteRunId, env) => {
   const data = {
     test_run_data: {
@@ -57,7 +45,7 @@ const logger = RequestLogger(/test.datapipe.prodperfect.com/);
 
 test.requestHooks(logger)('0 Pageview', async t => {
   await t.expect(getLocation()).contains('/html5-test-page/');
-  await t.eval(script_loader_function(localTesting, betaTesting));
+  await t.eval(script_loader_function);
   await t.wait(2000);
 
   await t
@@ -67,7 +55,7 @@ test.requestHooks(logger)('0 Pageview', async t => {
 
 test.requestHooks(logger)('1 Click', async t => {
   await t.expect(getLocation()).contains('/html5-test-page/');
-  await t.eval(script_loader_function(localTesting, betaTesting));
+  await t.eval(script_loader_function);
   await t.wait(2000);
   await t.click('a[href="#text"]');
 
@@ -83,7 +71,7 @@ test.requestHooks(logger)('1 Click', async t => {
 test.requestHooks(logger)('2 Form submission', async t => {
   await t.expect(getLocation()).contains('/html5-test-page/');
 
-  await t.eval(script_loader_function(localTesting, betaTesting));
+  await t.eval(script_loader_function);
   await t.wait(2000);
   await t.click('input[value="<input type=submit>"]');
   await t.wait(1000);
@@ -99,7 +87,7 @@ test.requestHooks(logger)('2 Form submission', async t => {
 test.requestHooks(logger)('3 Input change', async t => {
   await t.expect(getLocation()).contains('/html5-test-page/');
 
-  await t.eval(script_loader_function(localTesting, betaTesting));
+  await t.eval(script_loader_function);
   await t.wait(2000);
   await t.typeText('#input__text', 'text');
   await t.typeText('#textarea', 'text');
