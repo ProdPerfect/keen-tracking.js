@@ -1612,37 +1612,37 @@ var _listener = __webpack_require__(22);
 
 var _recordEventsBrowser = __webpack_require__(23);
 
-var _deferEvents = __webpack_require__(31);
+var _deferEvents = __webpack_require__(32);
 
 var _extendEvents = __webpack_require__(10);
 
-var _browserAutoTracking = __webpack_require__(32);
+var _browserAutoTracking = __webpack_require__(33);
 
-var _getBrowserProfile = __webpack_require__(34);
+var _getBrowserProfile = __webpack_require__(35);
 
-var _getDatetimeIndex = __webpack_require__(35);
+var _getDatetimeIndex = __webpack_require__(36);
 
-var _getDomainName = __webpack_require__(36);
+var _getDomainName = __webpack_require__(37);
 
 var _getDomNodePath = __webpack_require__(15);
 
-var _getDomNodeProfile = __webpack_require__(37);
+var _getDomNodeProfile = __webpack_require__(38);
 
 var _getScreenProfile = __webpack_require__(13);
 
-var _getScrollState = __webpack_require__(38);
+var _getScrollState = __webpack_require__(39);
 
-var _getUniqueId = __webpack_require__(39);
+var _getUniqueId = __webpack_require__(40);
 
 var _getWindowProfile = __webpack_require__(14);
 
-var _cookie = __webpack_require__(40);
+var _cookie = __webpack_require__(41);
 
 var _deepExtend = __webpack_require__(11);
 
-var _serializeForm = __webpack_require__(42);
+var _serializeForm = __webpack_require__(43);
 
-var _timer = __webpack_require__(43);
+var _timer = __webpack_require__(44);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2228,6 +2228,10 @@ var _unique = __webpack_require__(29);
 
 var _unique2 = _interopRequireDefault(_unique);
 
+var _sendBeacon = __webpack_require__(31);
+
+var _sendBeacon2 = _interopRequireDefault(_sendBeacon);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // ------------------------------
@@ -2362,33 +2366,11 @@ function send(_ref) {
   var requestType = configObject.requestType // specific method for one request
   || this.config.requestType; // global request type of client
 
-  if (navigator && navigator.sendBeacon && (requestType === 'beaconAPI' || requestType === 'beacon')
-  // so you can send specific recordEvent() using beaconAPI
-  // even if your global client's config prefers Fetch
-  ) {
-      navigator.sendBeacon(url + '?api_key=' + this.writeKey(), JSON.stringify(extendedEventsHash));
-      if (callback) {
-        // Beacon API is not handling responses nor errors
-        callback();
-      }
-      return this;
-    }
-
-  // this is IMAGE beacon, not the Beacon API. deprecated
-  if (requestType === 'beacon' || requestType === 'img') {
-    var getRequestUrl = this.url('events', encodeURIComponent(eventCollection), {
-      api_key: this.writeKey(),
-      data: encodeURIComponent(_base2.default.encode(JSON.stringify(extendedEventsHash))),
-      modified: new Date().getTime()
-    });
-    var getRequestUrlOkLength = getRequestUrl.length < getUrlMaxLength();
-
-    if (getRequestUrlOkLength) {
-      sendBeacon.call(this, getRequestUrl, callback);
-    } else {
-      if (callback) {
-        callback('Beacon URL length exceeds current browser limit, and XHR is not supported.', null);
-      }
+  if (requestType === 'beaconAPI' || requestType === 'beacon') {
+    (0, _sendBeacon2.default)(url + '?api_key=' + this.writeKey(), JSON.stringify(extendedEventsHash));
+    if (callback) {
+      // Beacon API is not handling responses nor errors
+      callback();
     }
     return this;
   }
@@ -2508,41 +2490,6 @@ function getUrlMaxLength() {
     }
   }
   return 16000;
-}
-
-/*
-  DEPRECATED METHODS
-*/
-
-// Image Beacon Requests
-// DEPRECATED
-function sendBeacon(url, callback) {
-  var self = this,
-      img = document.createElement('img'),
-      loaded = false;
-
-  img.onload = function () {
-    loaded = true;
-    if ('naturalHeight' in this) {
-      if (this.naturalHeight + this.naturalWidth === 0) {
-        this.onerror();
-        return;
-      }
-    } else if (this.width + this.height === 0) {
-      this.onerror();
-      return;
-    }
-    if (callback) {
-      callback.call(self);
-    }
-  };
-  img.onerror = function () {
-    loaded = true;
-    if (callback) {
-      callback.call(self, 'An error occurred!', null);
-    }
-  };
-  img.src = url + '&c=clv1';
 }
 
 /***/ }),
@@ -3350,6 +3297,59 @@ var getFromCache = exports.getFromCache = function getFromCache(hash) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = sendBeacon;
+var isString = function isString(val) {
+  return typeof val === 'string';
+};
+var isBlob = function isBlob(val) {
+  return val instanceof Blob;
+};
+
+function sendBeacon(url, data) {
+  if (!!window.navigator.sendBeacon) {
+    return window.navigator.sendBeacon(url, data);
+  } else {
+    return polyfillSendBeacon.call(window, url, data);
+  }
+}
+
+// Begin `sendBeacon` from navigator.sendBeacon package
+function polyfillSendBeacon(url, data) {
+  var event = this.event && this.event.type;
+  var sync = event === 'unload' || event === 'beforeunload';
+
+  var xhr = 'XMLHttpRequest' in this ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+  xhr.open('POST', url, !sync);
+  xhr.withCredentials = true;
+  xhr.setRequestHeader('Accept', '*/*');
+
+  if (isString(data)) {
+    xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
+    xhr.responseType = 'text/plain';
+  } else if (isBlob(data) && data.type) {
+    xhr.setRequestHeader('Content-Type', data.type);
+  }
+
+  try {
+    xhr.send(data);
+  } catch (error) {
+    return false;
+  }
+
+  return true;
+}
+// End `sendBeacon` from navigator.sendBeacon package
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -3459,7 +3459,7 @@ function handleValidationError(message) {
 }
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3470,7 +3470,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.initAutoTrackingCore = initAutoTrackingCore;
 
-var _package = __webpack_require__(33);
+var _package = __webpack_require__(34);
 
 var _package2 = _interopRequireDefault(_package);
 
@@ -3778,13 +3778,13 @@ function getMiliSecondsSinceDate(date) {
 }
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module) {
 
-module.exports = {"name":"prodperfect-keen-tracking","version":"2.0.9","upstreamVersion":"4.0.2","description":"ProdPerfect fork of the Data Collection SDK for Keen IO","main":"dist/node/keen-tracking.js","browser":"dist/keen-tracking.js","repository":{"type":"git","url":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js.git"},"scripts":{"start":"NODE_ENV=development webpack-dev-server","heroku:start":"node_modules/.bin/http-server dist --p ${PORT}","test":"NODE_ENV=test jest && NODE_ENV=test TEST_ENV=node jest","test:node":"NODE_ENV=test TEST_ENV=node jest","test:watch":"NODE_ENV=test jest --watch","test:node:watch":"NODE_ENV=test TEST_ENV=node jest --watch","test:regression":"npm run build && node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve' --local","test:regression:browserstack":"bash test/browserstack.sh","test:regression:browserstack:prod":"bash test/browserstack.sh","test:regression:browserstack:beta":"bash test/browserstack.sh","regressiontest":"npm run test:regression","build":"NODE_ENV=production webpack -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 webpack -p && npm run build:node","build:node":"TARGET=node NODE_ENV=production webpack -p","build:dev":"bash ./build_scripts/dev.sh","deploy:beta":"bash ./build_scripts/deploy_beta.sh","deploy:production":"bash ./build_scripts/deploy_production.sh","rollback:beta":"bash ./build_scripts/rollback_beta.sh","rollback:production":"bash ./build_scripts/rollback_production.sh","profile":"webpack --profile --json > stats.json","analyze":"webpack-bundle-analyzer stats.json /dist","preversion":"npm run build && npm run test","version":"git add .","postversion":"git push && git push --tags","demo":"node ./test/demo/index.node.js"},"bugs":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js/issues","author":{"name":"ProdPerfect, Inc.","url":"https://www.prodperfect.com"},"upstreamAuthor":"Keen IO <team@keen.io> (https://keen.io/)","contributors":["Dustin Larimer <dustin@keen.io> (https://github.com/dustinlarimer)","Eric Anderson <eric@keen.io> (https://github.com/aroc)","Joe Wegner <joe@keen.io> (http://www.wegnerdesign.com)","Alex Kleissner <alex@keen.io> (https://github.com/hex337)","Adam Kasprowicz <adam.kasprowicz@keen.io> (https://github.com/adamkasprowicz)"],"license":"MIT","dependencies":{"component-emitter":"^1.2.0","js-cookie":"2.1.0","keen-core":"^0.1.3","promise-polyfill":"^8.0.0","whatwg-fetch":"^2.0.4"},"devDependencies":{"babel-core":"^6.26.3","babel-jest":"^23.0.1","babel-loader":"^7.1.5","babel-plugin-transform-es2015-modules-commonjs":"^6.26.2","babel-plugin-transform-object-rest-spread":"^6.26.0","babel-polyfill":"^6.26.0","babel-preset-env":"^1.7.0","babel-preset-es2015":"^6.24.1","babel-preset-stage-0":"^6.24.1","eslint":"^4.19.1","eslint-config-airbnb":"^16.1.0","eslint-loader":"^2.0.0","eslint-plugin-import":"^2.11.0","eslint-plugin-jsx-a11y":"^6.0.3","gulp":"^3.8.11","gulp-awspublish":"0.0.23","gulp-connect":"^5.5.0","gulp-rename":"^1.2.2","gulp-replace":"^0.5.3","html-loader":"^0.5.5","html-webpack-plugin":"^3.2.0","http-server":"^0.11.1","jest":"^22.4.3","jest-fetch-mock":"^1.6.5","minimist":"^1.2.0","nock":"^9.2.6","regenerator-runtime":"^0.11.1","replace-in-file":"^3.4.0","testcafe":"^0.21.1","testcafe-browser-provider-browserstack":"^1.3.0","testcafe-browser-provider-puppeteer":"^1.3.0","testcafe-browser-provider-saucelabs":"^1.3.0","url-parse":"^1.4.3","webpack":"^4.20.2","webpack-bundle-analyzer":"^2.11.1","webpack-cli":"^3.1.1","webpack-dev-server":"^3.1.4","xhr-mock":"^2.3.2"}};
+module.exports = {"name":"prodperfect-keen-tracking","version":"2.0.9","upstreamVersion":"4.0.2","description":"ProdPerfect fork of the Data Collection SDK for Keen IO","main":"dist/node/keen-tracking.js","browser":"dist/keen-tracking.js","repository":{"type":"git","url":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js.git"},"scripts":{"start":"NODE_ENV=development webpack-dev-server","heroku:start":"node_modules/.bin/http-server dist --p ${PORT}","test":"NODE_ENV=test jest && NODE_ENV=test TEST_ENV=node jest","test:node":"NODE_ENV=test TEST_ENV=node jest","test:watch":"NODE_ENV=test jest --watch","test:node:watch":"NODE_ENV=test TEST_ENV=node jest --watch","test:regression":"npm run build && node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve' --local","test:regression:browserstack":"bash test/browserstack.sh","test:regression:browserstack:prod":"bash test/browserstack.sh","test:regression:browserstack:beta":"bash test/browserstack.sh","regressiontest":"npm run test:regression","build":"NODE_ENV=production webpack -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 webpack -p && npm run build:node","build:node":"TARGET=node NODE_ENV=production webpack -p","build:dev":"bash ./build_scripts/dev.sh","deploy:beta":"bash ./build_scripts/deploy_beta.sh","deploy:production":"bash ./build_scripts/deploy_production.sh","rollback:beta":"bash ./build_scripts/rollback_beta.sh","rollback:production":"bash ./build_scripts/rollback_production.sh","profile":"webpack --profile --json > stats.json","analyze":"webpack-bundle-analyzer stats.json /dist","preversion":"npm run build && npm run test","version":"git add .","postversion":"git push && git push --tags","demo":"node ./test/demo/index.node.js"},"bugs":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js/issues","author":{"name":"ProdPerfect, Inc.","url":"https://www.prodperfect.com"},"upstreamAuthor":"Keen IO <team@keen.io> (https://keen.io/)","contributors":["Dustin Larimer <dustin@keen.io> (https://github.com/dustinlarimer)","Eric Anderson <eric@keen.io> (https://github.com/aroc)","Joe Wegner <joe@keen.io> (http://www.wegnerdesign.com)","Alex Kleissner <alex@keen.io> (https://github.com/hex337)","Adam Kasprowicz <adam.kasprowicz@keen.io> (https://github.com/adamkasprowicz)"],"license":"MIT","dependencies":{"component-emitter":"^1.2.0","js-cookie":"2.1.0","keen-core":"^0.1.3","navigator.sendbeacon":"0.0.14","promise-polyfill":"^8.0.0","whatwg-fetch":"^2.0.4"},"devDependencies":{"babel-core":"^6.26.3","babel-jest":"^23.0.1","babel-loader":"^7.1.5","babel-plugin-transform-es2015-modules-commonjs":"^6.26.2","babel-plugin-transform-object-rest-spread":"^6.26.0","babel-polyfill":"^6.26.0","babel-preset-env":"^1.7.0","babel-preset-es2015":"^6.24.1","babel-preset-stage-0":"^6.24.1","eslint":"^4.19.1","eslint-config-airbnb":"^16.1.0","eslint-loader":"^2.0.0","eslint-plugin-import":"^2.11.0","eslint-plugin-jsx-a11y":"^6.0.3","gulp":"^3.8.11","gulp-awspublish":"0.0.23","gulp-connect":"^5.5.0","gulp-rename":"^1.2.2","gulp-replace":"^0.5.3","html-loader":"^0.5.5","html-webpack-plugin":"^3.2.0","http-server":"^0.11.1","jest":"^22.4.3","jest-fetch-mock":"^1.6.5","minimist":"^1.2.0","nock":"^9.2.6","regenerator-runtime":"^0.11.1","replace-in-file":"^3.4.0","testcafe":"^0.21.1","testcafe-browser-provider-browserstack":"^1.3.0","testcafe-browser-provider-puppeteer":"^1.3.0","testcafe-browser-provider-saucelabs":"^1.3.0","url-parse":"^1.4.3","webpack":"^4.20.2","webpack-bundle-analyzer":"^2.11.1","webpack-cli":"^3.1.1","webpack-dev-server":"^3.1.4","xhr-mock":"^2.3.2"}};
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3824,7 +3824,7 @@ function getDocumentDescription() {
 }
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3846,7 +3846,7 @@ function getDatetimeIndex(input) {
 }
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3894,7 +3894,7 @@ function getDomainName(url) {
 }
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3944,7 +3944,7 @@ function getDomNodeProfile(el) {
 }
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4000,7 +4000,7 @@ function getWindowHeight() {
 }
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4029,7 +4029,7 @@ function getUniqueId() {
 }
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4042,7 +4042,7 @@ exports.cookie = undefined;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _jsCookie = __webpack_require__(41);
+var _jsCookie = __webpack_require__(42);
 
 var _jsCookie2 = _interopRequireDefault(_jsCookie);
 
@@ -4113,7 +4113,7 @@ cookie.prototype.enabled = function () {
 };
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -4259,7 +4259,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4525,7 +4525,7 @@ function str_serialize(result, key, value) {
 }
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
