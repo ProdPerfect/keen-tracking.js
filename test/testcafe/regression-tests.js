@@ -1,5 +1,5 @@
 import minimist from 'minimist';
-import {ClientFunction, RequestLogger, Selector} from 'testcafe';
+import {ClientFunction, RequestLogger, RequestMock, Selector} from 'testcafe';
 import fs from 'fs';
 import { v4 } from 'uuid';
 
@@ -35,7 +35,7 @@ const setProdPerfectCookie = ClientFunction( (id, name, testSuiteRunId, env) => 
 
 
 fixture `Test Page`
-  .page `https://cbracco.github.io/html5-test-page/`
+  .page `./html5-test-page.html`
   .before( async ctx => {
     testSuiteRunId = v4();
   })
@@ -55,8 +55,14 @@ fixture `Test Page`
 
 const logger = RequestLogger(/test.datapipe.prodperfect.com/);
 
+const mock = RequestMock()
+  .onRequestTo('https://jsonplaceholder.typicode.com/posts')
+  .respond(null, 201);
+
+const mockLogger = RequestLogger(/jsonplaceholder.typicode.com/, { logRequestBody: true, stringifyRequestBody: true });
+
 test.requestHooks(logger)('0 Pageview', async t => {
-  await t.expect(getLocation()).contains('/html5-test-page/');
+  await t.expect(getLocation()).contains('/html5-test-page.html');
   await t.eval(script_loader_function(localTesting, betaTesting));
   await t.wait(2000);
 
@@ -66,7 +72,7 @@ test.requestHooks(logger)('0 Pageview', async t => {
 });
 
 test.requestHooks(logger)('1 Click', async t => {
-  await t.expect(getLocation()).contains('/html5-test-page/');
+  await t.expect(getLocation()).contains('/html5-test-page.html');
   await t.eval(script_loader_function(localTesting, betaTesting));
   await t.wait(2000);
   await t.click('a[href="#text"]');
@@ -80,24 +86,31 @@ test.requestHooks(logger)('1 Click', async t => {
     .expect(await logger.count((record) => /clicks/.test(record.request.url) && record.response.statusCode == 201)).eql(2);
 });
 
-test.requestHooks(logger)('2 Form submission', async t => {
-  await t.expect(getLocation()).contains('/html5-test-page/');
+test.requestHooks(logger, mock, mockLogger)('2 Form submission', async t => {
+  await t.expect(getLocation()).contains('/html5-test-page.html');
 
   await t.eval(script_loader_function(localTesting, betaTesting));
   await t.wait(2000);
+  await t.typeText('#input__text', 'test_text');
+  await t.wait(1000);
   await t.click('input[value="<input type=submit>"]');
   await t.wait(1000);
 
   await t
-    .expect(logger.requests.length).eql(4)
+    .expect(mockLogger.requests.length).eql(1)
+    .expect(mockLogger.requests[0].request.body).contains('title=test_text');
+
+  await t
+    .expect(logger.requests.length).eql(6)
     .expect(await logger.count((record) => /pageviews/.test(record.request.url) && record.response.statusCode == 201)).eql(1)
-    .expect(await logger.count((record) => /clicks/.test(record.request.url) && record.response.statusCode == 201)).eql(1)
+    .expect(await logger.count((record) => /clicks/.test(record.request.url) && record.response.statusCode == 201)).eql(2)
+    .expect(await logger.count((record) => /changes/.test(record.request.url) && record.response.statusCode == 201)).eql(1)
     .expect(await logger.count((record) => /form_submissions/.test(record.request.url) && record.response.statusCode == 201)).eql(1)
     .expect(await logger.count((record) => /pageunloads/.test(record.request.url) && record.response.statusCode == 201)).eql(1);
 });
 
 test.requestHooks(logger)('3 Input change', async t => {
-  await t.expect(getLocation()).contains('/html5-test-page/');
+  await t.expect(getLocation()).contains('/html5-test-page.html');
 
   await t.eval(script_loader_function(localTesting, betaTesting));
   await t.wait(2000);
