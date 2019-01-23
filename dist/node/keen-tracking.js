@@ -249,10 +249,7 @@ exports.default = configDefault;
 __webpack_require__.r(__webpack_exports__);
 
 // CONCATENATED MODULE: ./node_modules/promise-polyfill/src/finally.js
-/**
- * @this {Promise}
- */
-function finallyConstructor(callback) {
+/* harmony default export */ var src_finally = (function(callback) {
   var constructor = this.constructor;
   return this.then(
     function(value) {
@@ -266,9 +263,7 @@ function finallyConstructor(callback) {
       });
     }
   );
-}
-
-/* harmony default export */ var src_finally = (finallyConstructor);
+});
 
 // CONCATENATED MODULE: ./node_modules/promise-polyfill/src/index.js
 
@@ -286,21 +281,13 @@ function bind(fn, thisArg) {
   };
 }
 
-/**
- * @constructor
- * @param {Function} fn
- */
 function Promise(fn) {
   if (!(this instanceof Promise))
     throw new TypeError('Promises must be constructed via new');
   if (typeof fn !== 'function') throw new TypeError('not a function');
-  /** @type {!number} */
   this._state = 0;
-  /** @type {!boolean} */
   this._handled = false;
-  /** @type {Promise|undefined} */
   this._value = undefined;
-  /** @type {!Array<!Function>} */
   this._deferreds = [];
 
   doResolve(fn, this);
@@ -381,9 +368,6 @@ function finale(self) {
   self._deferreds = null;
 }
 
-/**
- * @constructor
- */
 function Handler(onFulfilled, onRejected, promise) {
   this.onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : null;
   this.onRejected = typeof onRejected === 'function' ? onRejected : null;
@@ -423,7 +407,6 @@ Promise.prototype['catch'] = function(onRejected) {
 };
 
 Promise.prototype.then = function(onFulfilled, onRejected) {
-  // @ts-ignore
   var prom = new this.constructor(noop);
 
   handle(this, new Handler(onFulfilled, onRejected, prom));
@@ -516,7 +499,6 @@ Promise._unhandledRejectionFn = function _unhandledRejectionFn(err) {
 
 
 
-/** @suppress {undefinedVars} */
 var globalNS = (function() {
   // the only reliable means to get the global object is
   // `Function('return this')()`
@@ -533,8 +515,8 @@ var globalNS = (function() {
   throw new Error('unable to locate global object');
 })();
 
-if (!('Promise' in globalNS)) {
-  globalNS['Promise'] = src;
+if (!globalNS.Promise) {
+  globalNS.Promise = src;
 } else if (!globalNS.Promise.prototype['finally']) {
   globalNS.Promise.prototype['finally'] = src_finally;
 }
