@@ -7,6 +7,7 @@ module.exports = {
   bail: true,
   testMatch: [files],
   testEnvironment: process.env.TEST_ENV || 'jsdom',
+  testURL: 'http://localhost:8080/',
   automock: false,
   setupFiles: [
     "./test/setupJest.js"

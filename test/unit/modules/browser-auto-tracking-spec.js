@@ -302,7 +302,7 @@ describe('Auto Tracking', () => {
     element: expect.any(Object),
     page: expect.any(Object),
     form: {
-      action: '/',
+      action: 'http://localhost:8080/',
       method: 'get',
       fields: {
         email: '---REDACTED---',
@@ -338,7 +338,7 @@ describe('Auto Tracking', () => {
     const pNode = document.createElement('INPUT');
 
     fNode.id = 'test-auto-tracker-submits';
-    fNode.action = '/';
+    fNode.action = 'http://localhost:8080/';
     fNode.onsubmit = mockFn1;
 
     iNode.type = 'text';
