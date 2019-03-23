@@ -67,7 +67,7 @@ var Keen =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 45);
+/******/ 	return __webpack_require__(__webpack_require__.s = 46);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -899,7 +899,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _keenCore = __webpack_require__(43);
+var _keenCore = __webpack_require__(44);
 
 var _keenCore2 = _interopRequireDefault(_keenCore);
 
@@ -960,58 +960,26 @@ exports.default = _keenCore2.default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-exports.getDomNodeProfile = getDomNodeProfile;
-
-var _getDomNodePath = __webpack_require__(10);
+exports.getBasicDomNodeProfile = getBasicDomNodeProfile;
 
 var _getDomNodeAttributes = __webpack_require__(25);
 
-var _getNParents = __webpack_require__(24);
+var EXCLUDE_VALUE_REGEX = /^((?!value).)*$/;
 
-var getTextContent = function getTextContent(el, options) {
-  if (!options.recordTextContent || !el.textContent) {
-    return null;
-  }
+function getBasicDomNodeProfile(el) {
 
-  if (options.redactTextContent) {
-    return '---REDACTED---';
-  }
-
-  return el.textContent;
-};
-
-function getDomNodeProfile(el) {
-  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-  var profile = {
+  return {
     class: el.className,
     href: el.href || null,
     id: el.id,
     name: el.name,
-    all_attrs: (0, _getDomNodeAttributes.getDomNodeAttributes)(el, /^((?!value).)*$/),
+    all_attrs: (0, _getDomNodeAttributes.getDomNodeAttributes)(el, EXCLUDE_VALUE_REGEX),
     node_name: el.nodeName,
     tag_name: el.tagName,
     text: el.text,
     title: el.title,
     type: el.type
   };
-
-  if (!options.basicProfile) {
-    profile = _extends({}, profile, {
-      action: el.action,
-      method: el.method,
-      n_parents: (0, _getNParents.getNParents)(el, options.nParents),
-      selector: (0, _getDomNodePath.getDomNodePath)(el),
-      text_content: getTextContent(el, options),
-      x_position: el.offsetLeft || el.clientLeft || null,
-      y_position: el.offsetTop || el.clientTop || null
-    });
-  }
-
-  return profile;
 }
 
 /***/ }),
@@ -1606,7 +1574,7 @@ Promise._unhandledRejectionFn = function _unhandledRejectionFn(err) {
 
 /* harmony default export */ __webpack_exports__["a"] = (Promise);
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(38).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(39).setImmediate))
 
 /***/ }),
 /* 18 */
@@ -2246,7 +2214,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.getNParents = getNParents;
 
-var _getDomNodeProfile = __webpack_require__(9);
+var _getBasicDomNodeProfile = __webpack_require__(9);
 
 function getNParents(element) {
   var nParents = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5;
@@ -2258,7 +2226,7 @@ function getNParents(element) {
     return parents;
   }
 
-  return getNParents(parent, nParents - 1, parents.concat(_extends({}, (0, _getDomNodeProfile.getDomNodeProfile)(parent, { basicProfile: true }), {
+  return getNParents(parent, nParents - 1, parents.concat(_extends({}, (0, _getBasicDomNodeProfile.getBasicDomNodeProfile)(parent), {
     nth_parent: parents.length + 1
   })));
 }
@@ -2291,6 +2259,53 @@ function getDomNodeAttributes(element, filter) {
 
 /***/ }),
 /* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.getDomNodeProfile = getDomNodeProfile;
+
+var _getDomNodePath = __webpack_require__(10);
+
+var _getBasicDomNodeProfile = __webpack_require__(9);
+
+var _getNParents = __webpack_require__(24);
+
+var getTextContent = function getTextContent(el, options) {
+  if (!options.recordTextContent || !el.textContent) {
+    return null;
+  }
+
+  if (options.redactTextContent) {
+    return '---REDACTED---';
+  }
+
+  return el.textContent;
+};
+
+function getDomNodeProfile(el) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+  return _extends({}, (0, _getBasicDomNodeProfile.getBasicDomNodeProfile)(el), {
+    action: el.action,
+    method: el.method,
+    n_parents: (0, _getNParents.getNParents)(el, options.nParents),
+    selector: (0, _getDomNodePath.getDomNodePath)(el),
+    text_content: getTextContent(el, options),
+    x_position: el.offsetLeft || el.clientLeft || null,
+    y_position: el.offsetTop || el.clientTop || null
+  });
+}
+
+/***/ }),
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2338,7 +2353,7 @@ function getDomainName(url) {
 }
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2360,7 +2375,7 @@ function getDatetimeIndex(input) {
 }
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2400,13 +2415,13 @@ function getDocumentDescription() {
 }
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module) {
 
-module.exports = {"name":"prodperfect-keen-tracking","version":"2.0.10","upstreamVersion":"4.0.2","description":"ProdPerfect fork of the Data Collection SDK for Keen IO","main":"dist/node/keen-tracking.js","browser":"dist/keen-tracking.js","repository":{"type":"git","url":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js.git"},"scripts":{"start":"NODE_ENV=development webpack-dev-server","heroku:start":"node_modules/.bin/http-server dist --p ${PORT}","test":"NODE_ENV=test jest && NODE_ENV=test TEST_ENV=node jest","test:node":"NODE_ENV=test TEST_ENV=node jest","test:watch":"NODE_ENV=test jest --watch","test:node:watch":"NODE_ENV=test TEST_ENV=node jest --watch","test:regression":"npm run build && node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve' --local","test:regression:browserstack:prod":"bash scripts/browserstack_prod.sh","test:regression:browserstack:beta":"bash scripts/browserstack_beta.sh","regressiontest":"npm run test:regression","build":"NODE_ENV=production webpack -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 webpack -p && npm run build:node","build:node":"TARGET=node NODE_ENV=production webpack -p","build:dev":"bash ./build_scripts/dev.sh","deploy:beta":"bash ./build_scripts/deploy_beta.sh","deploy:production":"bash ./build_scripts/deploy_production.sh","rollback:beta":"bash ./build_scripts/rollback_beta.sh","rollback:production":"bash ./build_scripts/rollback_production.sh","profile":"webpack --profile --json > stats.json","analyze":"webpack-bundle-analyzer stats.json /dist","preversion":"npm run build && npm run test","version":"git add .","postversion":"git push && git push --tags","demo":"node ./test/demo/index.node.js"},"bugs":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js/issues","author":{"name":"ProdPerfect, Inc.","url":"https://www.prodperfect.com"},"upstreamAuthor":"Keen IO <team@keen.io> (https://keen.io/)","contributors":["Dustin Larimer <dustin@keen.io> (https://github.com/dustinlarimer)","Eric Anderson <eric@keen.io> (https://github.com/aroc)","Joe Wegner <joe@keen.io> (http://www.wegnerdesign.com)","Alex Kleissner <alex@keen.io> (https://github.com/hex337)","Adam Kasprowicz <adam.kasprowicz@keen.io> (https://github.com/adamkasprowicz)"],"license":"MIT","dependencies":{"component-emitter":"^1.2.0","js-cookie":"2.1.0","keen-core":"^0.1.3","promise-polyfill":"^8.0.0","whatwg-fetch":"^2.0.4"},"devDependencies":{"babel-core":"^6.26.3","babel-jest":"^23.0.1","babel-loader":"^7.1.5","babel-plugin-transform-es2015-modules-commonjs":"^6.26.2","babel-plugin-transform-object-rest-spread":"^6.26.0","babel-polyfill":"^6.26.0","babel-preset-env":"^1.7.0","babel-preset-es2015":"^6.24.1","babel-preset-stage-0":"^6.24.1","eslint":"^4.19.1","eslint-config-airbnb":"^16.1.0","eslint-loader":"^2.0.0","eslint-plugin-import":"^2.11.0","eslint-plugin-jsx-a11y":"^6.0.3","gulp":"^3.8.11","gulp-awspublish":"0.0.23","gulp-connect":"^5.5.0","gulp-rename":"^1.2.2","gulp-replace":"^0.5.3","html-loader":"^0.5.5","html-webpack-plugin":"^3.2.0","http-server":"^0.11.1","jest":"^22.4.3","jest-fetch-mock":"^1.6.5","minimist":"^1.2.0","nock":"^9.2.6","regenerator-runtime":"^0.11.1","replace-in-file":"^3.4.0","testcafe":"^0.21.1","testcafe-browser-provider-browserstack":"^1.3.0","testcafe-browser-provider-puppeteer":"^1.3.0","testcafe-browser-provider-saucelabs":"^1.3.0","url-parse":"^1.4.3","webpack":"^4.20.2","webpack-bundle-analyzer":"^2.11.1","webpack-cli":"^3.1.1","webpack-dev-server":"^3.1.4","xhr-mock":"^2.3.2"}};
+module.exports = {"name":"prodperfect-keen-tracking","version":"2.0.9","upstreamVersion":"4.0.2","description":"ProdPerfect fork of the Data Collection SDK for Keen IO","main":"dist/node/keen-tracking.js","browser":"dist/keen-tracking.js","repository":{"type":"git","url":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js.git"},"scripts":{"start":"NODE_ENV=development webpack-dev-server","heroku:start":"node_modules/.bin/http-server dist --p ${PORT}","test":"NODE_ENV=test jest && NODE_ENV=test TEST_ENV=node jest","test:node":"NODE_ENV=test TEST_ENV=node jest","test:watch":"NODE_ENV=test jest --watch","test:node:watch":"NODE_ENV=test TEST_ENV=node jest --watch","test:regression":"npm run build && node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve' --local","test:regression:browserstack:prod":"bash scripts/browserstack_prod.sh","test:regression:browserstack:beta":"bash scripts/browserstack_beta.sh","regressiontest":"npm run test:regression","build":"NODE_ENV=production webpack -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 webpack -p && npm run build:node","build:node":"TARGET=node NODE_ENV=production webpack -p","build:dev":"bash ./build_scripts/dev.sh","deploy:beta":"bash ./build_scripts/deploy_beta.sh","deploy:production":"bash ./build_scripts/deploy_production.sh","rollback:beta":"bash ./build_scripts/rollback_beta.sh","rollback:production":"bash ./build_scripts/rollback_production.sh","profile":"webpack --profile --json > stats.json","analyze":"webpack-bundle-analyzer stats.json /dist","preversion":"npm run build && npm run test","version":"git add .","postversion":"git push && git push --tags","demo":"node ./test/demo/index.node.js"},"bugs":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js/issues","author":{"name":"ProdPerfect, Inc.","url":"https://www.prodperfect.com"},"upstreamAuthor":"Keen IO <team@keen.io> (https://keen.io/)","contributors":["Dustin Larimer <dustin@keen.io> (https://github.com/dustinlarimer)","Eric Anderson <eric@keen.io> (https://github.com/aroc)","Joe Wegner <joe@keen.io> (http://www.wegnerdesign.com)","Alex Kleissner <alex@keen.io> (https://github.com/hex337)","Adam Kasprowicz <adam.kasprowicz@keen.io> (https://github.com/adamkasprowicz)"],"license":"MIT","dependencies":{"component-emitter":"^1.2.0","js-cookie":"2.1.0","keen-core":"^0.1.3","promise-polyfill":"^8.0.0","whatwg-fetch":"^2.0.4"},"devDependencies":{"babel-core":"^6.26.3","babel-jest":"^23.0.1","babel-loader":"^7.1.5","babel-plugin-transform-es2015-modules-commonjs":"^6.26.2","babel-plugin-transform-object-rest-spread":"^6.26.0","babel-polyfill":"^6.26.0","babel-preset-env":"^1.7.0","babel-preset-es2015":"^6.24.1","babel-preset-stage-0":"^6.24.1","eslint":"^4.19.1","eslint-config-airbnb":"^16.1.0","eslint-loader":"^2.0.0","eslint-plugin-import":"^2.11.0","eslint-plugin-jsx-a11y":"^6.0.3","gulp":"^3.8.11","gulp-awspublish":"0.0.23","gulp-connect":"^5.5.0","gulp-rename":"^1.2.2","gulp-replace":"^0.5.3","html-loader":"^0.5.5","html-webpack-plugin":"^3.2.0","http-server":"^0.11.1","jest":"^22.4.3","jest-fetch-mock":"^1.6.5","minimist":"^1.2.0","nock":"^9.2.6","regenerator-runtime":"^0.11.1","replace-in-file":"^3.4.0","testcafe":"^0.21.1","testcafe-browser-provider-browserstack":"^1.3.0","testcafe-browser-provider-puppeteer":"^1.3.0","testcafe-browser-provider-saucelabs":"^1.3.0","url-parse":"^1.4.3","webpack":"^4.20.2","webpack-bundle-analyzer":"^2.11.1","webpack-cli":"^3.1.1","webpack-dev-server":"^3.1.4","xhr-mock":"^2.3.2"}};
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2417,7 +2432,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.initAutoTrackingCore = initAutoTrackingCore;
 
-var _package = __webpack_require__(29);
+var _package = __webpack_require__(30);
 
 var _package2 = _interopRequireDefault(_package);
 
@@ -2725,7 +2740,7 @@ function getMiliSecondsSinceDate(date) {
 }
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2843,7 +2858,7 @@ function handleValidationError(message) {
 }
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2985,7 +3000,7 @@ var getFromCache = exports.getFromCache = function getFromCache(hash) {
 };
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3004,7 +3019,7 @@ var _md = __webpack_require__(13);
 
 var _md2 = _interopRequireDefault(_md);
 
-var _cacheBrowser = __webpack_require__(32);
+var _cacheBrowser = __webpack_require__(33);
 
 var _configDefault = __webpack_require__(3);
 
@@ -3061,7 +3076,7 @@ var isUnique = exports.isUnique = function isUnique(customCacheConfig, extendedE
 exports.default = isUnique;
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3133,7 +3148,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 ;
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -3185,7 +3200,7 @@ module.exports = {
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -3375,7 +3390,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -3565,10 +3580,10 @@ process.umask = function() { return 0; };
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(4), __webpack_require__(36)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(4), __webpack_require__(37)))
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -3624,7 +3639,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(37);
+__webpack_require__(38);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -3638,7 +3653,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(4)))
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3659,7 +3674,7 @@ __webpack_require__(2);
 
 __webpack_require__(6);
 
-var _base = __webpack_require__(35);
+var _base = __webpack_require__(36);
 
 var _base2 = _interopRequireDefault(_base);
 
@@ -3677,11 +3692,11 @@ var _index2 = _interopRequireDefault(_index);
 
 var _extendEvents = __webpack_require__(15);
 
-var _fetchRetry = __webpack_require__(34);
+var _fetchRetry = __webpack_require__(35);
 
 var _fetchRetry2 = _interopRequireDefault(_fetchRetry);
 
-var _unique = __webpack_require__(33);
+var _unique = __webpack_require__(34);
 
 var _unique2 = _interopRequireDefault(_unique);
 
@@ -4003,7 +4018,7 @@ function sendBeacon(url, callback) {
 }
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4185,7 +4200,7 @@ function matches(elem, selector) {
 }
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var each = __webpack_require__(0),
@@ -4206,7 +4221,7 @@ function serialize(data){
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports) {
 
 module.exports = parseParams;
@@ -4228,15 +4243,15 @@ function parseParams(str){
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {(function(env){
   var previousKeen = env.Keen || undefined;
   var each = __webpack_require__(0),
       extend = __webpack_require__(1),
-      parseParams = __webpack_require__(42),
-      serialize = __webpack_require__(41);
+      parseParams = __webpack_require__(43),
+      serialize = __webpack_require__(42);
 
   var Emitter = __webpack_require__(7);
 
@@ -4463,7 +4478,7 @@ function parseParams(str){
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(4)))
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4486,25 +4501,25 @@ var _extend = __webpack_require__(1);
 
 var _extend2 = _interopRequireDefault(_extend);
 
-var _listener = __webpack_require__(40);
+var _listener = __webpack_require__(41);
 
-var _recordEventsBrowser = __webpack_require__(39);
+var _recordEventsBrowser = __webpack_require__(40);
 
-var _deferEvents = __webpack_require__(31);
+var _deferEvents = __webpack_require__(32);
 
 var _extendEvents = __webpack_require__(15);
 
-var _browserAutoTracking = __webpack_require__(30);
+var _browserAutoTracking = __webpack_require__(31);
 
-var _getBrowserProfile = __webpack_require__(28);
+var _getBrowserProfile = __webpack_require__(29);
 
-var _getDatetimeIndex = __webpack_require__(27);
+var _getDatetimeIndex = __webpack_require__(28);
 
-var _getDomainName = __webpack_require__(26);
+var _getDomainName = __webpack_require__(27);
 
 var _getDomNodePath = __webpack_require__(10);
 
-var _getDomNodeProfile = __webpack_require__(9);
+var _getDomNodeProfile = __webpack_require__(26);
 
 var _getScreenProfile = __webpack_require__(12);
 
@@ -4599,10 +4614,10 @@ var KeenTracking = exports.KeenTracking = Keen;
 exports.default = Keen;
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(44);
+module.exports = __webpack_require__(45);
 
 
 /***/ })

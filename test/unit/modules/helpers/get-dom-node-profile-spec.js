@@ -69,13 +69,6 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
     valueAttr: 'myAVal'
   }
 
-  const elSelect = document.createElement('select');
-  const option1 = document.createElement('option');
-  option1.value = 'barval';
-  option1.text = 'Bar Text';
-  option1.selected = true;
-  elSelect.appendChild(option1);
-
   test('should return relevant properties of the passed element, without textContent when not requested', () => {
     expect(getDomNodeProfile(elP)).toEqual({
       action: expectedP.action,
@@ -106,30 +99,6 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
       y_position: expectedP.clientTop
     })
   });
-
-  test('should return a smaller profile when basicProfile is requested', () => {
-    expect(getDomNodeProfile(elP, { basicProfile: true })).toEqual({
-      class: expectedP.className,
-      href: expectedP.href,
-      id: expectedP.id,
-      name: expectedP.name,
-      all_attrs: {
-        'aria-foo': expectedP['aria-foo'],
-        class: expectedP.className,
-        for: expectedP.for,
-        id: expectedP.id,
-        "ng-click": expectedP['ng-click'],
-        "ng-model": expectedP['ng-model'],
-        style: `cursor: ${expectedP.cursor};`,
-        title: expectedP.title,
-      },
-      node_name: expectedP.nodeName,
-      tag_name: expectedP.tagName,
-      text: expectedP.text,
-      title: expectedP.title,
-      type: expectedP.type
-    })
-  })
 
   test('should return textContent when text content is requested', () => {
     expect(getDomNodeProfile(elP, { recordTextContent: true }).text_content).toEqual(expectedP.textContent);
@@ -168,8 +137,4 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
       y_position: expectedA.clientTop
     })
   });
-
-  test('should return no value if a value is set', () => {
-    expect(getDomNodeProfile(elSelect).value).toEqual(undefined)
-  })
 });
