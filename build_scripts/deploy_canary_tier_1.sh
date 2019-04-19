@@ -1,12 +1,12 @@
-#!/bin/bash
+#/bin/bash
 
-readonly DISTRIBUTION_ID="E2VZR8TOC61OQY"
+readonly DISTRIBUTION_ID="E3CL6P6NHSXGR6"
 readonly PACKAGE_VERSION=$(node -pe "require('./package.json').version" | tr '[.]' '_')
 readonly FILE_NAME="keen-tracking"
 readonly MINIFIED_FILE="${FILE_NAME}.min.js"
 readonly UNMINIFIED_FILE="${FILE_NAME}.js"
 readonly BACKUP_FILE="${FILE_NAME}_last.min.js"
-readonly S3_BUCKET="prodperfect-keen-js"
+readonly S3_BUCKET="wespire-tracking-library"
 
 for arg in "$@"
 do
@@ -35,9 +35,6 @@ git pull origin master || { echo 'git pull origin master failed!' ; exit 1; }
 
 if aws --version &> /dev/null
 then
-  echo "uploading a versioned build of ${FILE_NAME}.min to s3://${S3_BUCKET}/${FILE_NAME}_${PACKAGE_VERSION}.min.js";
-  aws s3 cp "./dist/${MIN_FILE}" "s3://${S3_BUCKET}/${FILE_NAME}_${PACKAGE_VERSION}.min.js" --region us-east-2 --acl public-read
- 
   echo "Making backup of existing '${MINIFIED_FILE}' file.";
   aws s3 cp "s3://${S3_BUCKET}/${MINIFIED_FILE}" "s3://${S3_BUCKET}/${BACKUP_FILE}" --region us-east-1 --acl public-read
 
@@ -47,7 +44,7 @@ then
   echo "Uploading latest build of '${UNMINIFIED_FILE}'."  
   aws s3 cp "./dist/${UNMINIFIED_FILE}" "s3://${S3_BUCKET}/${UNMINIFIED_FILE}" --region us-east-1 --acl public-read
 
-  echo "Invalidating Cloudfront cache for 's3://${S3_BUCKET}/${MINIFIED_FILE}'...";
+  echo "Invalidating canary Cloudfront cache for 's3://${S3_BUCKET}/${MINIFIED_FILE}'...";
   INVALIDATION_ID=$(aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /\* | egrep Id | awk -F'"' '{ print $4}' )
   echo "Cloudfront invalidation command executed. Invalidation ID: '${INVALIDATION_ID}'. Waiting for Cloudfront invalidation to complete...";
   aws cloudfront wait invalidation-completed --distribution-id $DISTRIBUTION_ID --id $INVALIDATION_ID
@@ -56,5 +53,4 @@ else
   echo "please install AWS CLI";
   exit 1;
 fi;
-
-echo "Production deploy complete!";
+echo "Deploy Complete!";
