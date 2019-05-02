@@ -1,3 +1,5 @@
+import 'babel-polyfill';
+
 global.fetch = require('jest-fetch-mock');
 global.navigator = {
   sendBeacon: jest.mock()
