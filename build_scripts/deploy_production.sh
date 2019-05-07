@@ -36,7 +36,7 @@ git pull origin master || { echo 'git pull origin master failed!' ; exit 1; }
 if aws --version &> /dev/null
 then
   echo "uploading a versioned build of ${FILE_NAME}.min to s3://${S3_BUCKET}/${VERSIONED_FILE}";
-  aws s3 cp "./dist/${MINIFIED_FILE}" "s3://${S3_BUCKET}/${VERSIONED_FILE}" --region us-east-2 --acl public-read
+  aws s3 cp "./dist/${MINIFIED_FILE}" "s3://${S3_BUCKET}/${VERSIONED_FILE}" --region us-east-1 --acl public-read
  
   echo "Making backup of existing '${MINIFIED_FILE}' file.";
   aws s3 cp "s3://${S3_BUCKET}/${MINIFIED_FILE}" "s3://${S3_BUCKET}/${BACKUP_FILE}" --region us-east-1 --acl public-read
