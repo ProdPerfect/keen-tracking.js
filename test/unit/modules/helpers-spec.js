@@ -9,7 +9,6 @@ import { getUniqueId } from '../../../lib/helpers/getUniqueId';
 import { getWindowProfile } from '../../../lib/helpers/getWindowProfile';
 
 describe('Keen.helpers', () => {
-
   describe('#getUniqueId', () => {
     it('should return a random UUID', () => {
       expect(getUniqueId()).not.toBe(null);
@@ -42,11 +41,11 @@ describe('Keen.helpers', () => {
       const now = new Date();
       const datetime = getDatetimeIndex(now);
       expect(datetime).toEqual({
-        'hour_of_day'  : now.getHours(),
-        'day_of_week'  : parseInt( 1 + now.getDay() ),
-        'day_of_month' : now.getDate(),
-        'month'        : parseInt( 1 + now.getMonth() ),
-        'year'         : now.getFullYear()
+        hour_of_day: now.getHours(),
+        day_of_week: parseInt(1 + now.getDay(), 10),
+        day_of_month: now.getDate(),
+        month: parseInt(1 + now.getMonth(), 10),
+        year: now.getFullYear(),
       });
     });
   });
@@ -89,9 +88,9 @@ describe('Keen.helpers', () => {
       expect(getWindowProfile()).toBeInstanceOf(Object);
     });
     it('should have a height and width > 0', () => {
-      const _window = getWindowProfile();
-      expect(_window.height).toBeGreaterThan(0);
-      expect(_window.width).toBeGreaterThan(0);
+      const browserWindow = getWindowProfile();
+      expect(browserWindow.height).toBeGreaterThan(0);
+      expect(browserWindow.width).toBeGreaterThan(0);
     });
   });
 
@@ -105,10 +104,15 @@ describe('Keen.helpers', () => {
 
   describe('#getDomNodeProfile', () => {
     it('should return an object of properties for a given DOM node', () => {
-      const el = document.body;
+      document.body.innerHTML = '<body><div><div><div><div><div><div><div id="inner">'
+        + '  <span id="username" />'
+        + '  <button id="button" />'
+        + '</div></div></div></div></div></div></div></body>';
+
+      const el = document.querySelector('div#inner');
       const obj = getDomNodeProfile(el);
       expect(obj).toBeInstanceOf(Object);
-      expect(obj.node_name).toBe('BODY');
+      expect(obj.node_name).toBe('DIV');
     });
   });
 
@@ -126,12 +130,10 @@ describe('Keen.helpers', () => {
       const obj = getScrollState({
         pixel: 800,
         ratio: 0.50,
-        ratio_max: 1
+        ratio_max: 1,
       });
       expect(obj).toBeInstanceOf(Object);
       expect(obj.pixel_max).toBeGreaterThan(0);
     });
-
   });
-
 });
