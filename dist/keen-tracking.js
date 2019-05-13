@@ -1400,10 +1400,10 @@ var EXCLUDE_VALUE_REGEX = /^((?!value).)*$/;
 
 function getBasicDomNodeProfile(el) {
   return {
-    "class": el.getAttribute('class'),
+    "class": el.getAttribute && el.getAttribute('class') || null,
     href: el.href || null,
-    id: el.getAttribute('id'),
-    name: el.getAttribute('name'),
+    id: el.getAttribute && el.getAttribute('id') || null,
+    name: el.getAttribute && el.getAttribute('name') || null,
     all_attrs: (0, _getDomNodeAttributes.getDomNodeAttributes)(el, EXCLUDE_VALUE_REGEX),
     node_name: el.nodeName,
     tag_name: el.tagName,
