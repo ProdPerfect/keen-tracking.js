@@ -1,23 +1,6 @@
 {
   "presets": [
-    ["env", {
-      "production": {
-        "targets": {
-          "browsers": ["last 5 versions", "safari >= 7"]
-        },
-        "modules": false,
-      },
-      "development": {
-        "targets": {
-          "browsers": ["last 5 versions", "safari >= 7"]
-        },
-        "modules": false,
-      },
-      "test": {
-        "plugins": ["transform-es2015-modules-commonjs"],
-        "modules": false,
-      }
-    }]
+    ["@babel/preset-env", { "modules": false, "targets": ["last 5 versions", "safari >= 7"] }]
   ],
-  "plugins": ["transform-object-rest-spread"]
+  "plugins": ["@babel/plugin-proposal-object-rest-spread", "@babel/plugin-transform-modules-commonjs"],
 }
