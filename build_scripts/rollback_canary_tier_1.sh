@@ -1,8 +1,8 @@
 #!/bin/bash
 
-readonly DISTRIBUTION_ID="E2VZR8TOC61OQY";
+readonly DISTRIBUTION_ID="E3CL6P6NHSXGR6";
 readonly MIN_FILE="keen-tracking.min.js";
-
+readonly S3_BUCKET="wespire-tracking-library";
 
 for arg in "$@"
 do
@@ -16,7 +16,7 @@ done
 if [ "$FORCE_DEPLOY" != "yes" ]
 then
   while true; do
-      read -p "About to rollback production build to previous version. Confirm? (Yes/No) " yn
+      read -p "About to rollback build to previous version. Confirm? (Yes/No) " yn
       case $yn in
           [Yy]* ) break;;
           [Nn]* ) echo "Ok, exiting."; exit;;
@@ -27,15 +27,15 @@ fi
 
 if aws --version &> /dev/null
 then
-  echo "copying current 'last' file to 'min'";
-  aws s3 cp "s3://prodperfect-keen-js/keen-tracking_last.min.js" "s3://prodperfect-keen-js/${MIN_FILE}" --region us-east-2 --acl public-read
+  echo "rolling back canary";
+  aws s3 cp "s3://${S3_BUCKET}/keen-tracking_last.min.js" "s3://${S3_BUCKET}/${MIN_FILE}" --region us-east-2 --acl public-read
 else
   echo "please install AWS CLI";
   exit 1;
 fi;
 
-echo "invalidating cloudfront cache";
-invalidation_id=$(aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*" | egrep Id | awk -F'"' '{ print $4}' )
+echo "invalidating canary cloudfront cache";
+invalidation_id=$(aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/${MIN_FILE}" | egrep Id | awk -F'"' '{ print $4}' )
 
 echo "waiting for cloudfront invalidation to complete...";
 aws cloudfront wait invalidation-completed --distribution-id $DISTRIBUTION_ID --id $invalidation_id
