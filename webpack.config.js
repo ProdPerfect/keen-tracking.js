@@ -5,14 +5,6 @@ const fileName = 'keen-tracking';
 const entry = ( process.env.TARGET !== 'node' ) ? [ './lib/browser.js'] : './lib/server.js' ;
 const alias = ( process.env.TARGET !== 'node' ) ? [] : {'./cache-browser' : './cache-node'};
 
-let definePluginVars = {};
-if (process.env.NODE_ENV === 'development') {
-  const demoConfig = require('../demo-config');
-  definePluginVars = {
-    webpackKeenGlobals: JSON.stringify({ demoConfig })
-  };
-}
-
 module.exports = {
   entry,
 
@@ -73,17 +65,17 @@ module.exports = {
   // stats: 'verbose',
 
   plugins: [
-    new webpack.DefinePlugin(definePluginVars)
+    new webpack.BannerPlugin({ banner: "P2_KEEN_VERSION: " + require("./package.json").version })
   ],
 
   mode: process.env.NODE_ENV,
 
   devServer: {
-    contentBase: path.join(__dirname, 'test/demo'),
-    open: true,
+    contentBase: path.join(__dirname, 'dist'),
+    open: false,
     inline: true,
     hot: false,
-    watchContentBase: true,
+    watchContentBase: false,
   },
 
   externals: process.env.TARGET === 'node' ? {
