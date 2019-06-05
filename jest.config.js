@@ -1,6 +1,9 @@
-const files = `<rootDir>/test/unit/modules/*${
-  process.env.TEST_ENV ? `-${process.env.TEST_ENV}-` : ``
-}*.js`;
+let files;
+if(process.env.TEST_ENV) { 
+  files = `<rootDir>/test/unit/modules/*-${process.env.TEST_ENV}-*.js`;
+} else {
+  files = `<rootDir>/test/unit/modules/**/*.js`;
+}
 
 module.exports = {
   verbose: true,
