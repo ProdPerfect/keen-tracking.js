@@ -71,11 +71,11 @@ module.exports = {
   mode: process.env.NODE_ENV,
 
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    open: false,
+    contentBase: path.join(__dirname, 'test/demo'),
+    open: true,
     inline: true,
     hot: false,
-    watchContentBase: false,
+    watchContentBase: true,
   },
 
   externals: process.env.TARGET === 'node' ? {
@@ -86,5 +86,4 @@ module.exports = {
     'promise-polyfill': 'promise-polyfill'
   } : {
   },
-
 };
