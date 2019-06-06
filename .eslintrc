@@ -3,16 +3,20 @@
   "rules": {
   },
   "globals": {
-  	"Atomics": readonly,
-  	"jest": readonly,
-  	"test": readonly,
-  	"expect": readonly,
-  	"beforeEach": readonly,
-  	"describe": readonly,
-  	"it": readonly,
-  	"document": readonly
+    "Atomics": readonly,
+    "jest": readonly,
+    "test": readonly,
+    "expect": readonly,
+    "beforeEach": readonly,
+    "describe": readonly,
+    "it": readonly,
+    "document": readonly
   },
   "env": {
-  	"es6": true
+    "es6": true,
+    "browser": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2018
   }
 }
