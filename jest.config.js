@@ -1,25 +1,24 @@
 let files;
-if(process.env.TEST_ENV) { 
+if (process.env.TEST_ENV) {
   files = `<rootDir>/test/unit/modules/*-${process.env.TEST_ENV}-*.js`;
 } else {
-  files = `<rootDir>/test/unit/modules/**/*.js`;
+  files = '<rootDir>/test/unit/modules/**/*.js';
 }
 
 module.exports = {
-  verbose: true,
-  bail: true,
-  testMatch: [files],
-  testEnvironment: process.env.TEST_ENV || 'jsdom',
-  testURL: 'http://localhost:8080/',
   automock: false,
+  bail: true,
+  testEnvironment: process.env.TEST_ENV || 'jsdom',
+  testMatch: [files],
+  testURL: 'http://localhost',
   setupFiles: [
-    "./test/setupJest.js"
+    './test/setupJest.js',
   ],
   transform: {
-      "^.+\\.js$": "babel-jest",
+    '^.+\\.js$': 'babel-jest',
   },
   transformIgnorePatterns: [
-    "node_modules/(?!promise-polyfill|whatwg-fetch)/"
+    'node_modules/(?!promise-polyfill|whatwg-fetch)/',
   ],
-  testURL: 'http://localhost'
+  verbose: true,
 };

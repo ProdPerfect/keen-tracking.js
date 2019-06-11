@@ -81,13 +81,13 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
         for: expectedP.for,
         id: expectedP.id,
         name: expectedP.name,
-        "ng-click": expectedP['ng-click'],
-        "ng-model": expectedP['ng-model'],
+        'ng-click': expectedP['ng-click'],
+        'ng-model': expectedP['ng-model'],
         style: `cursor: ${expectedP.cursor};`,
         title: expectedP.title,
       },
       class: expectedP.className,
-      cursor: "pointer",
+      cursor: 'pointer',
       href: expectedP.href,
       id: expectedP.id,
       method: expectedP.method,
@@ -101,7 +101,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
       title: expectedP.title,
       type: expectedP.type,
       x_position: expectedP.offsetLeft,
-      y_position: expectedP.clientTop
+      y_position: expectedP.clientTop,
     };
 
     expect(getDomNodeProfile(elP)).toEqual(expectedProfile);
@@ -122,7 +122,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
     expect(getDomNodeProfile(elA)).toEqual({
       action: expectedA.action,
       class: expectedA.className,
-      cursor: "foo",
+      cursor: 'foo',
       href: expectedA.href,
       id: expectedA.id,
       method: expectedA.method,
@@ -130,7 +130,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
       all_attrs: {
         href: expectedA.href_short,
         name: expectedA.name,
-        style: "cursor: foo;",
+        style: 'cursor: foo;',
         title: expectedA.title,
         type: expectedA.type
 
