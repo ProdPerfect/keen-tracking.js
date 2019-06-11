@@ -29,9 +29,9 @@ then
   done
 fi
 
-echo "updating local master";
-git checkout master || { echo 'git checkout master failed!' ; exit 1; }
-git pull origin master || { echo 'git pull origin master failed!' ; exit 1; }
+echo "getting latest production branch";
+git checkout production || { echo 'git checkout production failed!' ; exit 1; }
+git pull origin production || { echo 'git pull origin production failed!' ; exit 1; }
 
 if aws --version &> /dev/null
 then
