@@ -9,9 +9,10 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
   elP.setAttribute('ng-click', 'ngClickAttr');
   elP.setAttribute('ng-model', 'ngModelAttr');
   elP.setAttribute('title', 'myTitle');
+  elP.setAttribute('name', 'testEl');
   elP.name = 'testEl';
-  elP.text ='myText';
-  elP.textContent ='myTextContent';
+  elP.text = 'myText';
+  elP.textContent = 'myTextContent';
   elP.style.cursor = 'pointer';
 
   const expectedP = {
@@ -44,16 +45,18 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
   elA.setAttribute('value', 'myAVal');
   elA.method = 'post';
   elA.action = '/my_action';
+  elA.style.cursor = 'foo';
   elA.name = 'testA';
   elA.textContent ='myATextContent';
 
   const expectedA = {
     action: '/my_action',
-    className: '',
+    className: null,
     clientTop: null, // requires hack that I couldn't get working to work with JSDom
-    href: 'http://localhost:8080/#foo',
+    cursor: 'foo',
+    href: 'http://localhost/#foo',
     href_short: '#foo',
-    id: '',
+    id: null,
     method: 'post',
     name: 'testA',
     'ng-click': null,
@@ -70,23 +73,25 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
   }
 
   test('should return relevant properties of the passed element, without textContent when not requested', () => {
-    expect(getDomNodeProfile(elP)).toEqual({
+    const expectedProfile = {
       action: expectedP.action,
-      class: expectedP.className,
-      href: expectedP.href,
-      id: expectedP.id,
-      method: expectedP.method,
-      name: expectedP.name,
       all_attrs: {
         'aria-foo': expectedP['aria-foo'],
         class: expectedP.className,
         for: expectedP.for,
         id: expectedP.id,
-        "ng-click": expectedP['ng-click'],
-        "ng-model": expectedP['ng-model'],
+        name: expectedP.name,
+        'ng-click': expectedP['ng-click'],
+        'ng-model': expectedP['ng-model'],
         style: `cursor: ${expectedP.cursor};`,
         title: expectedP.title,
       },
+      class: expectedP.className,
+      cursor: 'pointer',
+      href: expectedP.href,
+      id: expectedP.id,
+      method: expectedP.method,
+      name: expectedP.name,
       n_parents: [],
       node_name: expectedP.nodeName,
       selector: '',
@@ -96,8 +101,10 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
       title: expectedP.title,
       type: expectedP.type,
       x_position: expectedP.offsetLeft,
-      y_position: expectedP.clientTop
-    })
+      y_position: expectedP.clientTop,
+    };
+
+    expect(getDomNodeProfile(elP)).toEqual(expectedProfile);
   });
 
   test('should return textContent when text content is requested', () => {
@@ -115,6 +122,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
     expect(getDomNodeProfile(elA)).toEqual({
       action: expectedA.action,
       class: expectedA.className,
+      cursor: 'foo',
       href: expectedA.href,
       id: expectedA.id,
       method: expectedA.method,
@@ -122,8 +130,10 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
       all_attrs: {
         href: expectedA.href_short,
         name: expectedA.name,
+        style: 'cursor: foo;',
         title: expectedA.title,
         type: expectedA.type
+
       },
       n_parents: [],
       node_name: expectedA.nodeName,
@@ -135,6 +145,6 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
       type: expectedA.type,
       x_position: expectedA.offsetLeft,
       y_position: expectedA.clientTop
-    })
+    });
   });
 });

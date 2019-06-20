@@ -1,23 +1,32 @@
-const demoTests = (demoConfig, Keen) => {
-
- //demoConfig.requestType = 'beaconAPI';
-
-  // demoConfig.referrerPolicy: 'origin',
-  // https://googlechrome.github.io/samples/fetch-api/fetch-referrer-policy.html
-  // const client = new Keen(demoConfig);
-  /*
-  demoConfig.retry = {
-    limit: 3,
-    initialDelay: 1000
+const demoTests = (Keen) => {
+  const demoConfig = {
+    host: 'wilson.datapipe.prodperfect.com/v1',
+    projectId: '5b2939e7c9e77c00012dff97',
+    readKey: 'YOUR_READ_KEY',
+    writeKey: '060270145B86166EFEACA8D50526B8A211A187932B839730187351A12591E4426F976AF08458CDF2315CE4AA543BEF8464FF2785A6F5B03715F104982EBAEFB5F47168DB8A0AB508C985D63B7FA9D8B7622109D65918EE151224FD24EB179ABC',
+    requestType: 'beacon',
   };
-  */
 
-  Keen.debug = true;
+  Keen.debug = true; //eslint-disable-line
 
   const client = new Keen(demoConfig);
 
+  const options = {
+    ignoreDisabledFormFields: false,
+    ignoreFormFieldTypes: [],
+    recordClicks: true,
+    recordFormSubmits: true,
+    recordInputChanges: true,
+    test_name: 'recording-lib-demo',
+    test_id: 'recording-lib-demo',
+    recordPageViews: true,
+    recordPageUnloads: true,
+    redactTextContent: false,
+    recordScrollState: true,
+  };
+  client.initAutoTracking(options);
+
   const x = Math.random();
-  console.log(x);
   const eventBody = {
     x: 123456,
     page: {

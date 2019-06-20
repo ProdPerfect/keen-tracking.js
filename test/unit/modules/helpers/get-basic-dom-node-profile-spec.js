@@ -9,6 +9,7 @@ describe('ProdPerfectRecorder.helpers.getBasicDomNodeProfile', () => {
   elP.setAttribute('ng-click', 'ngClickAttr');
   elP.setAttribute('ng-model', 'ngModelAttr');
   elP.setAttribute('title', 'myTitle');
+  elP.setAttribute('name', 'testEl');
   elP.name = 'testEl';
   elP.text ='myText';
   elP.textContent ='myTextContent';
@@ -55,6 +56,7 @@ describe('ProdPerfectRecorder.helpers.getBasicDomNodeProfile', () => {
         class: expectedP.className,
         for: expectedP.for,
         id: expectedP.id,
+        name: expectedP.name,
         "ng-click": expectedP['ng-click'],
         "ng-model": expectedP['ng-model'],
         style: `cursor: ${expectedP.cursor};`,
