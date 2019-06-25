@@ -1,0 +1,8 @@
+.circleci
+node_modules
+build_scripts/
+dist/
+docs/
+jquery.js
+scripts/
+webpack.config.js

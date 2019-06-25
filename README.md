@@ -1,5 +1,11 @@
 # keen-tracking.js
 
+### Developer guide
+
+Please see the [Prodperfect developer workflow guide](https://docs.google.com/document/d/1dftRP4kEHfd4I2QzgePO5XB1Mzz5J--hpdLy5ky_7vc/edit#) for instructions on how to start developing on this repo, create PRs, and deploy to production.
+
+Below are instructions regarding generic installation and usage of the library (taken from the upstream Keen tracking library README.md).
+
 ### Installation
 
 Install this package from NPM *Recommended*
