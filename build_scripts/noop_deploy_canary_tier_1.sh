@@ -35,12 +35,14 @@ git pull origin master || { echo 'git pull origin master failed!' ; exit 1; }
 if aws --version &> /dev/null
 then
   echo "Uploading **NO OP*** build of '${MINIFIED_FILE}'."  
-  # aws s3 cp "./dist/${NO_OP_MINIFIED_FILE}" "s3://${S3_BUCKET}/${MINIFIED_FILE}" --region us-east-1 --acl public-read
+  aws s3 cp "./dist/${NO_OP_MINIFIED_FILE}" "s3://${S3_BUCKET}/${MINIFIED_FILE}" --region us-east-1 --acl public-read
 
   echo "Invalidating canary Cloudfront cache for 's3://${S3_BUCKET}/${MINIFIED_FILE}'...";
-  # INVALIDATION_ID=$(aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /\* | egrep Id | awk -F'"' '{ print $4}' )
+  INVALIDATION_ID=$(aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /\* | egrep Id | awk -F'"' '{ print $4}' )
+  
   echo "Cloudfront invalidation command executed. Invalidation ID: '${INVALIDATION_ID}'. Waiting for Cloudfront invalidation to complete...";
-  # aws cloudfront wait invalidation-completed --distribution-id $DISTRIBUTION_ID --id $INVALIDATION_ID
+  aws cloudfront wait invalidation-completed --distribution-id $DISTRIBUTION_ID --id $INVALIDATION_ID
+  
   echo "Invalidation finished."
 else
   echo "please install AWS CLI";
