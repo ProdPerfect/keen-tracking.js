@@ -29,7 +29,7 @@ then
   done
 fi
 
-echo "checking out production branch";
+echo "getting latest production branch";
 git checkout production || { echo 'git checkout production failed!' ; exit 1; }
 git pull origin production || { echo 'git pull origin production failed!' ; exit 1; }
 

@@ -29,9 +29,9 @@ then
   done
 fi
 
-echo "updating local master";
-git checkout master || { echo 'git checkout master failed!' ; exit 1; }
-git pull origin master || { echo 'git pull origin master failed!' ; exit 1; }
+echo "getting latest canary-tier-2 branch";
+git checkout canary-tier-2 || { echo 'git checkout canary-tier-2 failed!' ; exit 1; }
+git pull origin canary-tier-2 || { echo 'git pull origin canary-tier-2 failed!' ; exit 1; }
 
 if aws --version &> /dev/null
 then

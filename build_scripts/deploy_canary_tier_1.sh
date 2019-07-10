@@ -29,7 +29,7 @@ then
   done
 fi
 
-echo "updating local master";
+echo "getting latest master branch";
 git checkout master || { echo 'git checkout master failed!' ; exit 1; }
 git pull origin master || { echo 'git pull origin master failed!' ; exit 1; }
 
