@@ -1398,7 +1398,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getBasicDomNodeProfile = getBasicDomNodeProfile;
 
-var _getDomNodeAttributes = __webpack_require__(39);
+var _getDomNodeAttributes = __webpack_require__(40);
 
 var EXCLUDE_VALUE_REGEX = /^((?!value).)*$/;
 
@@ -1711,33 +1711,33 @@ var _deferEvents = __webpack_require__(32);
 
 var _extendEvents = __webpack_require__(10);
 
-var _browserAutoTracking = __webpack_require__(33);
+var _browserAutoTracking = _interopRequireDefault(__webpack_require__(33));
 
-var _getBrowserProfile = __webpack_require__(35);
+var _getBrowserProfile = __webpack_require__(36);
 
-var _getDatetimeIndex = __webpack_require__(36);
+var _getDatetimeIndex = __webpack_require__(37);
 
-var _getDomainName = __webpack_require__(37);
+var _getDomainName = __webpack_require__(38);
 
 var _getDomNodePath = __webpack_require__(15);
 
-var _getDomNodeProfile = __webpack_require__(38);
+var _getDomNodeProfile = __webpack_require__(39);
 
 var _getScreenProfile = __webpack_require__(13);
 
-var _getScrollState = __webpack_require__(41);
+var _getScrollState = __webpack_require__(42);
 
-var _getUniqueId = __webpack_require__(42);
+var _getUniqueId = __webpack_require__(43);
 
 var _getWindowProfile = __webpack_require__(14);
 
-var _cookie = __webpack_require__(43);
+var _cookie = __webpack_require__(44);
 
 var _deepExtend = __webpack_require__(11);
 
-var _serializeForm = __webpack_require__(45);
+var _serializeForm = __webpack_require__(46);
 
-var _timer = __webpack_require__(46);
+var _timer = __webpack_require__(47);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -1762,7 +1762,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 // Auto-Tracking
 // ------------------------
 
-var initAutoTracking = (0, _browserAutoTracking.initAutoTrackingCore)(_index["default"]);
+var initAutoTracking = (0, _browserAutoTracking["default"])(_index["default"]);
 (0, _extend["default"])(_index["default"].prototype, {
   initAutoTracking: initAutoTracking
 }); // ------------------------
@@ -3604,18 +3604,21 @@ function handleValidationError(message) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.initAutoTrackingCore = initAutoTrackingCore;
+exports["default"] = initAutoTrackingCore;
 
 var _package = _interopRequireDefault(__webpack_require__(34));
+
+var _eventSampler = _interopRequireDefault(__webpack_require__(35));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function initAutoTrackingCore(lib) {
-  return function () {
+  return function init() {
     var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var client = this;
-    var helpers = lib.helpers;
-    var utils = lib.utils;
+    var sampler = new _eventSampler["default"](client);
+    var helpers = lib.helpers,
+        utils = lib.utils;
     var options = utils.extend({
       ignoreDisabledFormFields: false,
       ignoreFormFieldTypes: ['password'],
@@ -3661,6 +3664,14 @@ function initAutoTrackingCore(lib) {
 
     session_cookie.set('session_uuid', session_uuid);
     session_cookie.expire(1 / 48);
+
+    if (!sampler.shouldSample(session_uuid)) {
+      // Short-circuit here so that no event listeners are set up.
+      // This way we don't send any traffic to our servers,
+      // Thereby effectively throttling overall uploaded data from this customer.
+      return;
+    }
+
     var prodperfectTestData = new utils.cookie('prodperfect_test').get('test_run_data');
     var now = new Date();
     var cookie = new utils.cookie('keen');
@@ -3916,10 +3927,90 @@ function getMiliSecondsSinceDate(date) {
 /* 34 */
 /***/ (function(module) {
 
-module.exports = {"name":"prodperfect-keen-tracking","version":"2.0.15","upstreamVersion":"4.0.2","description":"ProdPerfect fork of the Data Collection SDK for Keen IO","main":"dist/node/keen-tracking.js","browser":"dist/keen-tracking.js","repository":{"type":"git","url":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js.git"},"scripts":{"start":"NODE_ENV=development webpack-dev-server","test":"NODE_ENV=test node_modules/.bin/jest && NODE_ENV=test TEST_ENV=node node_modules/.bin/jest","test:node":"NODE_ENV=test TEST_ENV=node node_modules/.bin/jest","test:watch":"NODE_ENV=test node_modules/.bin/jest --watch","test:node:watch":"NODE_ENV=test TEST_ENV=node node_modules/.bin/jest --watch","test:regression":"npm run build && node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve' --local","test:regression:browserstack:prod":"bash scripts/browserstack_prod.sh","test:regression:browserstack:beta":"bash scripts/browserstack_beta.sh","build":"NODE_ENV=production ./node_modules/.bin/webpack -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 ./node_modules/.bin/webpack -p && npm run build:node && npm run build:noop","build:node":"TARGET=node NODE_ENV=production ./node_modules/.bin/webpack -p","build:noop":"NODE_ENV=production ./node_modules/.bin/webpack --config webpack.noop.config.js -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 ./node_modules/.bin/webpack --config webpack.noop.config.js -p","deploy:canary-tier-1":"bash ./build_scripts/deploy_canary_tier_1.sh","deploy:canary-tier-2":"bash ./build_scripts/deploy_canary_tier_2.sh","deploy:production":"bash ./build_scripts/deploy_production.sh","profile":"webpack --profile --json > stats.json","analyze":"webpack-bundle-analyzer stats.json /dist","preversion":"npm run build && npm run test","demo":"node ./test/demo/index.node.js"},"bugs":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js/issues","author":{"name":"ProdPerfect, Inc.","url":"https://www.prodperfect.com"},"upstreamAuthor":"Keen IO <team@keen.io> (https://keen.io/)","contributors":["Dustin Larimer <dustin@keen.io> (https://github.com/dustinlarimer)","Eric Anderson <eric@keen.io> (https://github.com/aroc)","Joe Wegner <joe@keen.io> (http://www.wegnerdesign.com)","Alex Kleissner <alex@keen.io> (https://github.com/hex337)","Adam Kasprowicz <adam.kasprowicz@keen.io> (https://github.com/adamkasprowicz)"],"license":"MIT","dependencies":{"component-emitter":"^1.2.0","js-cookie":"2.1.0","keen-core":"^0.1.3","promise-polyfill":"^8.0.0","whatwg-fetch":"^2.0.4"},"devDependencies":{"@babel/cli":"^7.0.0","@babel/core":"^7.0.0","@babel/plugin-proposal-class-properties":"^7.0.0","@babel/plugin-proposal-decorators":"^7.0.0","@babel/plugin-proposal-do-expressions":"^7.0.0","@babel/plugin-proposal-export-default-from":"^7.0.0","@babel/plugin-proposal-export-namespace-from":"^7.0.0","@babel/plugin-proposal-function-bind":"^7.0.0","@babel/plugin-proposal-function-sent":"^7.0.0","@babel/plugin-proposal-json-strings":"^7.0.0","@babel/plugin-proposal-logical-assignment-operators":"^7.0.0","@babel/plugin-proposal-nullish-coalescing-operator":"^7.0.0","@babel/plugin-proposal-numeric-separator":"^7.0.0","@babel/plugin-proposal-object-rest-spread":"^7.0.0","@babel/plugin-proposal-optional-chaining":"^7.0.0","@babel/plugin-proposal-pipeline-operator":"^7.0.0","@babel/plugin-proposal-throw-expressions":"^7.0.0","@babel/plugin-syntax-dynamic-import":"^7.0.0","@babel/plugin-syntax-import-meta":"^7.0.0","@babel/polyfill":"^7.0.0","@babel/preset-env":"^7.0.0","babel-jest":"^24.7.1","babel-loader":"^8.0.5","babel-plugin-transform-object-rest-spread":"^6.26.0","babel-polyfill":"^6.26.0","eslint":"^5.16.0","eslint-config-airbnb":"^17.1.0","eslint-loader":"^2.1.2","eslint-plugin-import":"^2.17.2","eslint-plugin-jsx-a11y":"^6.2.1","eslint-plugin-react":"^7.12.4","gulp":"^4.0.1","gulp-awspublish":"^4.0.0","gulp-connect":"^5.7.0","gulp-rename":"^1.2.2","gulp-replace":"^0.5.3","html-loader":"^0.5.5","html-webpack-plugin":"^3.2.0","http-server":"^0.11.1","jest":"^24.7.1","jest-fetch-mock":"^1.6.5","minimist":"^1.2.0","nock":"^9.2.6","regenerator-runtime":"^0.11.1","replace-in-file":"^3.4.0","testcafe":"^1.1.3","testcafe-browser-provider-browserstack":"^1.3.0","testcafe-browser-provider-puppeteer":"^1.4.0","testcafe-browser-provider-saucelabs":"^1.7.0","url-parse":"^1.4.3","webpack":"^4.30.0","webpack-bundle-analyzer":"^3.3.2","webpack-cli":"^3.3.1","webpack-dev-server":"^3.3.1","xhr-mock":"^2.3.2"}};
+module.exports = {"name":"prodperfect-keen-tracking","version":"2.0.15","upstreamVersion":"4.0.2","description":"ProdPerfect fork of the Data Collection SDK for Keen IO","main":"dist/node/keen-tracking.js","browser":"dist/keen-tracking.js","repository":{"type":"git","url":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js.git"},"scripts":{"start":"NODE_ENV=development webpack-dev-server","test":"NODE_ENV=test node_modules/.bin/jest && NODE_ENV=test TEST_ENV=node node_modules/.bin/jest","test:node":"NODE_ENV=test TEST_ENV=node node_modules/.bin/jest","test:watch":"NODE_ENV=test node_modules/.bin/jest --watch","test:node:watch":"NODE_ENV=test TEST_ENV=node node_modules/.bin/jest --watch","test:regression":"npm run build && node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve' --local","test:regression:browserstack:prod":"bash scripts/browserstack_prod.sh","test:regression:browserstack:beta":"bash scripts/browserstack_beta.sh","build":"NODE_ENV=production ./node_modules/.bin/webpack -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 ./node_modules/.bin/webpack -p && npm run build:node && npm run build:noop","build:node":"TARGET=node NODE_ENV=production ./node_modules/.bin/webpack -p","build:noop":"NODE_ENV=production ./node_modules/.bin/webpack --config webpack.noop.config.js -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 ./node_modules/.bin/webpack --config webpack.noop.config.js -p","deploy:canary-tier-1":"bash ./build_scripts/deploy_canary_tier_1.sh","deploy:canary-tier-1:noop":"bash ./build_scripts/noop_deploy_canary_tier_1.sh","deploy:canary-tier-2":"bash ./build_scripts/deploy_canary_tier_2.sh","deploy:production":"bash ./build_scripts/deploy_production.sh","profile":"webpack --profile --json > stats.json","analyze":"webpack-bundle-analyzer stats.json /dist","preversion":"npm run build && npm run test","demo":"node ./test/demo/index.node.js"},"bugs":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js/issues","author":{"name":"ProdPerfect, Inc.","url":"https://www.prodperfect.com"},"upstreamAuthor":"Keen IO <team@keen.io> (https://keen.io/)","contributors":["Dustin Larimer <dustin@keen.io> (https://github.com/dustinlarimer)","Eric Anderson <eric@keen.io> (https://github.com/aroc)","Joe Wegner <joe@keen.io> (http://www.wegnerdesign.com)","Alex Kleissner <alex@keen.io> (https://github.com/hex337)","Adam Kasprowicz <adam.kasprowicz@keen.io> (https://github.com/adamkasprowicz)"],"license":"MIT","dependencies":{"component-emitter":"^1.2.0","js-cookie":"2.1.0","keen-core":"^0.1.3","promise-polyfill":"^8.0.0","whatwg-fetch":"^2.0.4"},"devDependencies":{"@babel/cli":"^7.0.0","@babel/core":"^7.0.0","@babel/plugin-proposal-class-properties":"^7.0.0","@babel/plugin-proposal-decorators":"^7.0.0","@babel/plugin-proposal-do-expressions":"^7.0.0","@babel/plugin-proposal-export-default-from":"^7.0.0","@babel/plugin-proposal-export-namespace-from":"^7.0.0","@babel/plugin-proposal-function-bind":"^7.0.0","@babel/plugin-proposal-function-sent":"^7.0.0","@babel/plugin-proposal-json-strings":"^7.0.0","@babel/plugin-proposal-logical-assignment-operators":"^7.0.0","@babel/plugin-proposal-nullish-coalescing-operator":"^7.0.0","@babel/plugin-proposal-numeric-separator":"^7.0.0","@babel/plugin-proposal-object-rest-spread":"^7.0.0","@babel/plugin-proposal-optional-chaining":"^7.0.0","@babel/plugin-proposal-pipeline-operator":"^7.0.0","@babel/plugin-proposal-throw-expressions":"^7.0.0","@babel/plugin-syntax-dynamic-import":"^7.0.0","@babel/plugin-syntax-import-meta":"^7.0.0","@babel/polyfill":"^7.0.0","@babel/preset-env":"^7.0.0","babel-jest":"^24.7.1","babel-loader":"^8.0.5","babel-plugin-transform-object-rest-spread":"^6.26.0","babel-polyfill":"^6.26.0","eslint":"^5.16.0","eslint-config-airbnb":"^17.1.0","eslint-loader":"^2.1.2","eslint-plugin-import":"^2.17.2","eslint-plugin-jsx-a11y":"^6.2.1","eslint-plugin-react":"^7.12.4","gulp":"^4.0.1","gulp-awspublish":"^4.0.0","gulp-connect":"^5.7.0","gulp-rename":"^1.2.2","gulp-replace":"^0.5.3","html-loader":"^0.5.5","html-webpack-plugin":"^3.2.0","http-server":"^0.11.1","jest":"^24.7.1","jest-fetch-mock":"^1.6.5","minimist":"^1.2.0","nock":"^9.2.6","regenerator-runtime":"^0.11.1","replace-in-file":"^3.4.0","testcafe":"^1.1.3","testcafe-browser-provider-browserstack":"^1.3.0","testcafe-browser-provider-puppeteer":"^1.4.0","testcafe-browser-provider-saucelabs":"^1.7.0","url-parse":"^1.4.3","webpack":"^4.30.0","webpack-bundle-analyzer":"^3.3.2","webpack-cli":"^3.3.1","webpack-dev-server":"^3.3.1","xhr-mock":"^2.3.2"}};
 
 /***/ }),
 /* 35 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var projectIdThrottleBlacklist = {
+  // 'PROJECT_ID': THROTTLE_RATE (between 0.00 - 1.00)
+  xijiKKCqPQzOl0EKa9ta0vmD: 0.10,
+  G6kGCgdy9JzppocYlPmUGpXU: 0.02,
+  NIKxOIAk2dsmlD88wgvNEK5S: 0.8
+};
+
+var Sampler =
+/*#__PURE__*/
+function () {
+  function Sampler(Keen) {
+    _classCallCheck(this, Sampler);
+
+    this.config = Keen.config;
+    this.projectIdThrottleBlacklist = projectIdThrottleBlacklist;
+  }
+
+  _createClass(Sampler, [{
+    key: "shouldSample",
+    value: function shouldSample(uniqueId) {
+      if (!this.canBeThrottled()) {
+        return true;
+      }
+
+      var hashValue = Sampler.convertIdToInt(uniqueId);
+      var desiredSampleRate = this.desiredSampleRateForProjectId();
+      var divisor = 0xffffffff;
+      var isBelowThreshold = hashValue / divisor < desiredSampleRate;
+      return isBelowThreshold;
+    }
+  }, {
+    key: "desiredSampleRateForProjectId",
+    value: function desiredSampleRateForProjectId() {
+      var throttleRate = this.projectIdThrottleBlacklist[this.config.projectId];
+      return throttleRate === undefined ? 1 : throttleRate;
+    }
+  }, {
+    key: "canBeThrottled",
+    value: function canBeThrottled() {
+      var isTestEnvironment = document.cookie.indexOf('prodperfect_test') !== -1;
+
+      if (isTestEnvironment) {
+        return false;
+      }
+
+      return this.desiredSampleRateForProjectId() !== 1.00;
+    }
+  }], [{
+    key: "convertIdToInt",
+    value: function convertIdToInt(uniqueId) {
+      var hash = String(uniqueId).replace(/[^a-fA-F0-9]/g, '').toLowerCase();
+      hash = String("ffffffff".concat(hash)).slice(-8); // left-pad the hash and trim
+
+      return parseInt(hash, 16);
+    }
+  }]);
+
+  return Sampler;
+}();
+
+exports["default"] = Sampler;
+
+/***/ }),
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3961,7 +4052,7 @@ function getDocumentDescription() {
 }
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3984,7 +4075,7 @@ function getDatetimeIndex(input) {
 }
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4031,7 +4122,7 @@ function getDomainName(url) {
 }
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4046,7 +4137,7 @@ var _getDomNodePath = __webpack_require__(15);
 
 var _getBasicDomNodeProfile = __webpack_require__(16);
 
-var _getNParents = __webpack_require__(40);
+var _getNParents = __webpack_require__(41);
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
@@ -4079,7 +4170,7 @@ function getDomNodeProfile(el) {
 }
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4108,7 +4199,7 @@ function getDomNodeAttributes(el, filter) {
 }
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4140,7 +4231,7 @@ function getNParents(element) {
 }
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4195,7 +4286,7 @@ function getWindowHeight() {
 }
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4225,7 +4316,7 @@ function getUniqueId() {
 }
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4236,7 +4327,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.cookie = void 0;
 
-var _jsCookie = _interopRequireDefault(__webpack_require__(44));
+var _jsCookie = _interopRequireDefault(__webpack_require__(45));
 
 var _extend = _interopRequireDefault(__webpack_require__(1));
 
@@ -4316,7 +4407,7 @@ cookie.prototype.enabled = function () {
 };
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -4462,7 +4553,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4722,7 +4813,7 @@ function str_serialize(result, key, value) {
 }
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
