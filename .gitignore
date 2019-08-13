@@ -10,3 +10,6 @@ demo-config.js
 .idea
 .vagrant
 cookbooks
+*.swn
+*.swo
+*.swp
