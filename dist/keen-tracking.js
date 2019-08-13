@@ -2260,7 +2260,7 @@ function addListener(eventType, fn) {
 
 
 function matches(elem, selector) {
-  if ('*' === selector) {
+  if (selector === '*') {
     return true;
   } // We'll use querySelectorAll to find all element matching the selector,
   // then check if the given element is included in that list.
