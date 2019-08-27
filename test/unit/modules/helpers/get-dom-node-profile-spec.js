@@ -32,7 +32,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
     offsetLeft: null, // requires hack that I couldn't get working to work with JSDom
     parentNode: null,
     tagName: 'P',
-    text: 'myText',
+    text: null,
     textContent: 'myTextContent',
     title: 'myTitle',
     type: undefined
@@ -65,7 +65,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
     offsetLeft: null, // requires hack that I couldn't get working to work with JSDom
     parentNode: null,
     tagName: 'A',
-    text: 'myATextContent',
+    text: null,
     textContent: 'myATextContent',
     title: 'myATitle',
     type: 'submit',
