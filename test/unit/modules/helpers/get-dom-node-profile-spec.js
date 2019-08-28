@@ -1,4 +1,4 @@
-import { getDomNodeProfile } from '../../../../lib/helpers/getDomNodeProfile';
+import getDomNodeProfile from '../../../../lib/helpers/getDomNodeProfile';
 
 describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
   const elP = document.createElement('p');
@@ -35,8 +35,8 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
     text: null,
     textContent: 'myTextContent',
     title: 'myTitle',
-    type: undefined
-  }
+    type: null,
+  };
 
   const elA = document.createElement('a');
   elA.setAttribute('href', '#foo');
