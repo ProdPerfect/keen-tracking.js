@@ -6,6 +6,7 @@ readonly FILE_NAME="keen-tracking"
 readonly MINIFIED_FILE="${FILE_NAME}.min.js"
 readonly BACKUP_FILE="${FILE_NAME}_last.min.js"
 readonly VERSIONED_FILE="${FILE_NAME}_${PACKAGE_VERSION}.min.js"
+readonly NO_OP_MINIFIED_FILE="${FILE_NAME}.no_op.min.js"
 readonly S3_BUCKET="wespire-tracking-library"
 
 for arg in "$@"
@@ -44,7 +45,10 @@ then
   echo "Uploading latest build of '${MINIFIED_FILE}'."  
   aws s3 cp "./dist/${MINIFIED_FILE}" "s3://${S3_BUCKET}/${MINIFIED_FILE}" --region us-east-1 --acl public-read
 
-  echo "Invalidating canary Cloudfront cache for 's3://${S3_BUCKET}/${MINIFIED_FILE}'...";
+  echo "Uploading latest build of '${NO_OP_MINIFIED_FILE}'."  
+  aws s3 cp "./dist/${NO_OP_MINIFIED_FILE}" "s3://${S3_BUCKET}/${NO_OP_MINIFIED_FILE}" --region us-east-1 --acl public-read
+
+  echo "Invalidating canary Cloudfront cache for 's3://${S3_BUCKET}/'...";
   INVALIDATION_ID=$(aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths /\* | egrep Id | awk -F'"' '{ print $4}' )
   echo "Cloudfront invalidation command executed. Invalidation ID: '${INVALIDATION_ID}'. Waiting for Cloudfront invalidation to complete...";
   aws cloudfront wait invalidation-completed --distribution-id $DISTRIBUTION_ID --id $INVALIDATION_ID
