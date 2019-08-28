@@ -1,6 +1,4 @@
 import { getNParents } from '../../../../lib/helpers/getNParents';
-import getBasicDomNodeProfile from '../../../../lib/helpers/getBasicDomNodeProfile';
-
 
 describe('RecordingLibrary.helpers.getNParents', () => {
   const node = document.createElement('strong');
