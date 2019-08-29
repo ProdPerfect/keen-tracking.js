@@ -18,7 +18,7 @@ describe('RecordingLibrary.helpers.getNParents', () => {
   p4.setAttribute('type', 'submit');
 
   const p5 = document.createElement('h1');
-  p5.setAttribute('title', 'h1title')
+  p5.setAttribute('title', 'h1title');
 
   const p6 = document.createElement('body');
 
@@ -39,8 +39,8 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         node_name: 'SPAN',
         tag_name: 'SPAN',
         text: null,
-        title: '',
-        type: undefined,
+        title: null,
+        type: null,
         href: null,
         nth_parent: 1,
       },
@@ -52,8 +52,8 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         node_name: 'P',
         tag_name: 'P',
         text: null,
-        title: '',
-        type: undefined,
+        title: null,
+        type: null,
         href: null,
         nth_parent: 2,
       },
@@ -65,8 +65,8 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         node_name: 'DIV',
         tag_name: 'DIV',
         text: null,
-        title: '',
-        type: undefined,
+        title: null,
+        type: null,
         href: null,
         nth_parent: 3,
       },
@@ -78,7 +78,7 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         node_name: 'A',
         tag_name: 'A',
         text: null,
-        title: '',
+        title: null,
         type: 'submit',
         href: 'http://localhost/#foo',
         nth_parent: 4,
@@ -92,7 +92,7 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         tag_name: 'H1',
         text: null,
         title: 'h1title',
-        type: undefined,
+        type: null,
         href: null,
         nth_parent: 5,
       },
@@ -109,8 +109,8 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         node_name: 'SPAN',
         tag_name: 'SPAN',
         text: null,
-        title: '',
-        type: undefined,
+        title: null,
+        type: null,
         href: null,
         nth_parent: 1,
       },
@@ -132,10 +132,51 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         node_name: 'BODY',
         tag_name: 'BODY',
         text: null,
-        title: '',
-        type: undefined,
+        title: null,
+        type: null,
         nth_parent: 1,
       },
     ]);
+  });
+
+  test('should return correct attributes when edge case form/input elements exist', () => {
+    const formEl = document.createElement('form');
+    formEl.setAttribute('id', 'parent-form');
+    formEl.setAttribute('type', 'form');
+    formEl.setAttribute('class', 'some-class');
+
+    const inputEl = document.createElement('input');
+    inputEl.setAttribute('id', 'name');
+    formEl.appendChild(inputEl);
+
+    const inputEl2 = document.createElement('input');
+    inputEl2.setAttribute('id', 'tagName');
+    formEl.appendChild(inputEl2);
+
+    const inputEl3 = document.createElement('input');
+    inputEl3.setAttribute('id', 'id');
+    formEl.appendChild(inputEl3);
+
+    const inputEl4 = document.createElement('input');
+    inputEl4.setAttribute('id', 'class');
+    formEl.appendChild(inputEl4);
+
+    expect(getNParents(inputEl)).toEqual([{
+      class: 'some-class',
+      id: 'parent-form',
+      name: null,
+      all_attrs: {
+        class: 'some-class',
+        id: 'parent-form',
+        type: 'form',
+      },
+      href: null,
+      node_name: 'FORM',
+      tag_name: 'FORM',
+      text: null,
+      title: null,
+      type: 'form',
+      nth_parent: 1,
+    }]);
   });
 });

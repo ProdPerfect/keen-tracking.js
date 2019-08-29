@@ -1,4 +1,4 @@
-/*! P2_KEEN_VERSION: 2.0.18 */
+/*! P2_KEEN_VERSION: 2.0.19 */
 var Keen =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -1396,9 +1396,11 @@ function getDomNodePath(el) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getBasicDomNodeProfile = getBasicDomNodeProfile;
+exports["default"] = getBasicDomNodeProfile;
 
 var _getDomNodeAttributes = __webpack_require__(40);
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var EXCLUDE_VALUE_REGEX = /^((?!value).)*$/;
 
@@ -1413,15 +1415,15 @@ function getAttr(el, name) {
 function getBasicDomNodeProfile(el) {
   return {
     "class": getAttr(el, 'class') || null,
-    href: el.href || null,
+    href: (_typeof(el.href) === 'object' ? null : el.href) || null,
     id: getAttr(el, 'id') || null,
     name: getAttr(el, 'name') || null,
     all_attrs: (0, _getDomNodeAttributes.getDomNodeAttributes)(el, EXCLUDE_VALUE_REGEX),
-    node_name: el.nodeName,
-    tag_name: el.tagName,
+    node_name: _typeof(el.nodeName) === 'object' ? 'FORM' : el.nodeName,
+    tag_name: _typeof(el.tagName) === 'object' ? 'FORM' : el.tagName,
     text: getAttr(el, 'text'),
-    title: el.title,
-    type: el.type
+    title: getAttr(el, 'title'),
+    type: getAttr(el, 'type')
   };
 }
 
@@ -1729,7 +1731,7 @@ var _getDomainName = __webpack_require__(38);
 
 var _getDomNodePath = __webpack_require__(15);
 
-var _getDomNodeProfile = __webpack_require__(39);
+var _getDomNodeProfile = _interopRequireDefault(__webpack_require__(39));
 
 var _getScreenProfile = __webpack_require__(13);
 
@@ -1782,7 +1784,7 @@ var initAutoTracking = (0, _browserAutoTracking["default"])(_index["default"]);
   getDatetimeIndex: _getDatetimeIndex.getDatetimeIndex,
   getDomainName: _getDomainName.getDomainName,
   getDomNodePath: _getDomNodePath.getDomNodePath,
-  getDomNodeProfile: _getDomNodeProfile.getDomNodeProfile,
+  getDomNodeProfile: _getDomNodeProfile["default"],
   getScreenProfile: _getScreenProfile.getScreenProfile,
   getScrollState: _getScrollState.getScrollState,
   getUniqueId: _getUniqueId.getUniqueId,
@@ -3935,7 +3937,7 @@ function getMiliSecondsSinceDate(date) {
 /* 34 */
 /***/ (function(module) {
 
-module.exports = {"name":"prodperfect-keen-tracking","version":"2.0.18","upstreamVersion":"4.0.2","description":"ProdPerfect fork of the Data Collection SDK for Keen IO","main":"dist/node/keen-tracking.js","browser":"dist/keen-tracking.js","repository":{"type":"git","url":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js.git"},"scripts":{"start":"NODE_ENV=development webpack-dev-server","test":"NODE_ENV=test node_modules/.bin/jest && NODE_ENV=test TEST_ENV=node node_modules/.bin/jest","test:node":"NODE_ENV=test TEST_ENV=node node_modules/.bin/jest","test:watch":"NODE_ENV=test node_modules/.bin/jest --watch","test:node:watch":"NODE_ENV=test TEST_ENV=node node_modules/.bin/jest --watch","test:regression":"npm run build && node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve' --local","test:regression:browserstack:prod":"bash scripts/browserstack_prod.sh","test:regression:browserstack:beta":"bash scripts/browserstack_beta.sh","build":"NODE_ENV=production ./node_modules/.bin/webpack -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 ./node_modules/.bin/webpack -p && npm run build:node && npm run build:noop","build:node":"TARGET=node NODE_ENV=production ./node_modules/.bin/webpack -p","build:noop":"NODE_ENV=production ./node_modules/.bin/webpack --config webpack.noop.config.js -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 ./node_modules/.bin/webpack --config webpack.noop.config.js -p","deploy:canary-tier-1":"bash ./build_scripts/deploy_canary_tier_1.sh","deploy:canary-tier-1:noop":"bash ./build_scripts/noop_deploy_canary_tier_1.sh","deploy:canary-tier-2":"bash ./build_scripts/deploy_canary_tier_2.sh","deploy:production":"bash ./build_scripts/deploy_production.sh","profile":"webpack --profile --json > stats.json","analyze":"webpack-bundle-analyzer stats.json /dist","preversion":"npm run build && npm run test","demo":"node ./test/demo/index.node.js"},"bugs":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js/issues","author":{"name":"ProdPerfect, Inc.","url":"https://www.prodperfect.com"},"upstreamAuthor":"Keen IO <team@keen.io> (https://keen.io/)","contributors":["Dustin Larimer <dustin@keen.io> (https://github.com/dustinlarimer)","Eric Anderson <eric@keen.io> (https://github.com/aroc)","Joe Wegner <joe@keen.io> (http://www.wegnerdesign.com)","Alex Kleissner <alex@keen.io> (https://github.com/hex337)","Adam Kasprowicz <adam.kasprowicz@keen.io> (https://github.com/adamkasprowicz)"],"license":"MIT","dependencies":{"component-emitter":"^1.2.0","js-cookie":"2.1.0","keen-core":"^0.1.3","promise-polyfill":"^8.0.0","whatwg-fetch":"^2.0.4"},"devDependencies":{"@babel/cli":"^7.0.0","@babel/core":"^7.0.0","@babel/plugin-proposal-class-properties":"^7.0.0","@babel/plugin-proposal-decorators":"^7.0.0","@babel/plugin-proposal-do-expressions":"^7.0.0","@babel/plugin-proposal-export-default-from":"^7.0.0","@babel/plugin-proposal-export-namespace-from":"^7.0.0","@babel/plugin-proposal-function-bind":"^7.0.0","@babel/plugin-proposal-function-sent":"^7.0.0","@babel/plugin-proposal-json-strings":"^7.0.0","@babel/plugin-proposal-logical-assignment-operators":"^7.0.0","@babel/plugin-proposal-nullish-coalescing-operator":"^7.0.0","@babel/plugin-proposal-numeric-separator":"^7.0.0","@babel/plugin-proposal-object-rest-spread":"^7.0.0","@babel/plugin-proposal-optional-chaining":"^7.0.0","@babel/plugin-proposal-pipeline-operator":"^7.0.0","@babel/plugin-proposal-throw-expressions":"^7.0.0","@babel/plugin-syntax-dynamic-import":"^7.0.0","@babel/plugin-syntax-import-meta":"^7.0.0","@babel/polyfill":"^7.0.0","@babel/preset-env":"^7.0.0","babel-jest":"^24.7.1","babel-loader":"^8.0.5","babel-plugin-transform-object-rest-spread":"^6.26.0","babel-polyfill":"^6.26.0","eslint":"^5.16.0","eslint-config-airbnb":"^17.1.0","eslint-loader":"^2.1.2","eslint-plugin-import":"^2.17.2","eslint-plugin-jsx-a11y":"^6.2.1","eslint-plugin-react":"^7.12.4","gulp":"^4.0.1","gulp-awspublish":"^4.0.0","gulp-connect":"^5.7.0","gulp-rename":"^1.2.2","gulp-replace":"^0.5.3","html-loader":"^0.5.5","html-webpack-plugin":"^3.2.0","http-server":"^0.11.1","jest":"^24.7.1","jest-fetch-mock":"^1.6.5","minimist":"^1.2.0","nock":"^9.2.6","regenerator-runtime":"^0.11.1","replace-in-file":"^3.4.0","testcafe":"^1.1.3","testcafe-browser-provider-browserstack":"^1.3.0","testcafe-browser-provider-puppeteer":"^1.4.0","testcafe-browser-provider-saucelabs":"^1.7.0","url-parse":"^1.4.3","webpack":"^4.30.0","webpack-bundle-analyzer":"^3.3.2","webpack-cli":"^3.3.1","webpack-dev-server":"^3.3.1","xhr-mock":"^2.3.2"}};
+module.exports = {"name":"prodperfect-keen-tracking","version":"2.0.19","upstreamVersion":"4.0.2","description":"ProdPerfect fork of the Data Collection SDK for Keen IO","main":"dist/node/keen-tracking.js","browser":"dist/keen-tracking.js","repository":{"type":"git","url":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js.git"},"scripts":{"start":"NODE_ENV=development webpack-dev-server","test":"NODE_ENV=test node_modules/.bin/jest && NODE_ENV=test TEST_ENV=node node_modules/.bin/jest","test:node":"NODE_ENV=test TEST_ENV=node node_modules/.bin/jest","test:watch":"NODE_ENV=test node_modules/.bin/jest --watch","test:node:watch":"NODE_ENV=test TEST_ENV=node node_modules/.bin/jest --watch","test:regression":"npm run build && node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve' --local","test:regression:browserstack:prod":"bash scripts/browserstack_prod.sh","test:regression:browserstack:beta":"bash scripts/browserstack_beta.sh","build":"NODE_ENV=production ./node_modules/.bin/webpack -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 ./node_modules/.bin/webpack -p && npm run build:node && npm run build:noop","build:node":"TARGET=node NODE_ENV=production ./node_modules/.bin/webpack -p","build:noop":"NODE_ENV=production ./node_modules/.bin/webpack --config webpack.noop.config.js -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 ./node_modules/.bin/webpack --config webpack.noop.config.js -p","deploy:canary-tier-1":"bash ./build_scripts/deploy_canary_tier_1.sh","deploy:canary-tier-1:noop":"bash ./build_scripts/noop_deploy_canary_tier_1.sh","deploy:canary-tier-2":"bash ./build_scripts/deploy_canary_tier_2.sh","deploy:production":"bash ./build_scripts/deploy_production.sh","profile":"webpack --profile --json > stats.json","analyze":"webpack-bundle-analyzer stats.json /dist","preversion":"npm run build && npm run test","demo":"node ./test/demo/index.node.js"},"bugs":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js/issues","author":{"name":"ProdPerfect, Inc.","url":"https://www.prodperfect.com"},"upstreamAuthor":"Keen IO <team@keen.io> (https://keen.io/)","contributors":["Dustin Larimer <dustin@keen.io> (https://github.com/dustinlarimer)","Eric Anderson <eric@keen.io> (https://github.com/aroc)","Joe Wegner <joe@keen.io> (http://www.wegnerdesign.com)","Alex Kleissner <alex@keen.io> (https://github.com/hex337)","Adam Kasprowicz <adam.kasprowicz@keen.io> (https://github.com/adamkasprowicz)"],"license":"MIT","dependencies":{"component-emitter":"^1.2.0","js-cookie":"2.1.0","keen-core":"^0.1.3","promise-polyfill":"^8.0.0","whatwg-fetch":"^2.0.4"},"devDependencies":{"@babel/cli":"^7.0.0","@babel/core":"^7.0.0","@babel/plugin-proposal-class-properties":"^7.0.0","@babel/plugin-proposal-decorators":"^7.0.0","@babel/plugin-proposal-do-expressions":"^7.0.0","@babel/plugin-proposal-export-default-from":"^7.0.0","@babel/plugin-proposal-export-namespace-from":"^7.0.0","@babel/plugin-proposal-function-bind":"^7.0.0","@babel/plugin-proposal-function-sent":"^7.0.0","@babel/plugin-proposal-json-strings":"^7.0.0","@babel/plugin-proposal-logical-assignment-operators":"^7.0.0","@babel/plugin-proposal-nullish-coalescing-operator":"^7.0.0","@babel/plugin-proposal-numeric-separator":"^7.0.0","@babel/plugin-proposal-object-rest-spread":"^7.0.0","@babel/plugin-proposal-optional-chaining":"^7.0.0","@babel/plugin-proposal-pipeline-operator":"^7.0.0","@babel/plugin-proposal-throw-expressions":"^7.0.0","@babel/plugin-syntax-dynamic-import":"^7.0.0","@babel/plugin-syntax-import-meta":"^7.0.0","@babel/polyfill":"^7.0.0","@babel/preset-env":"^7.0.0","babel-jest":"^24.7.1","babel-loader":"^8.0.5","babel-plugin-transform-object-rest-spread":"^6.26.0","babel-polyfill":"^6.26.0","eslint":"^5.16.0","eslint-config-airbnb":"^17.1.0","eslint-loader":"^2.1.2","eslint-plugin-import":"^2.17.2","eslint-plugin-jsx-a11y":"^6.2.1","eslint-plugin-react":"^7.12.4","gulp":"^4.0.1","gulp-awspublish":"^4.0.0","gulp-connect":"^5.7.0","gulp-rename":"^1.2.2","gulp-replace":"^0.5.3","html-loader":"^0.5.5","html-webpack-plugin":"^3.2.0","http-server":"^0.11.1","jest":"^24.7.1","jest-fetch-mock":"^1.6.5","minimist":"^1.2.0","nock":"^9.2.6","regenerator-runtime":"^0.11.1","replace-in-file":"^3.4.0","testcafe":"^1.1.3","testcafe-browser-provider-browserstack":"^1.3.0","testcafe-browser-provider-puppeteer":"^1.4.0","testcafe-browser-provider-saucelabs":"^1.7.0","url-parse":"^1.4.3","webpack":"^4.30.0","webpack-bundle-analyzer":"^3.3.2","webpack-cli":"^3.3.1","webpack-dev-server":"^3.3.1","xhr-mock":"^2.3.2"}};
 
 /***/ }),
 /* 35 */
@@ -4139,13 +4141,15 @@ function getDomainName(url) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getDomNodeProfile = getDomNodeProfile;
+exports["default"] = getDomNodeProfile;
 
 var _getDomNodePath = __webpack_require__(15);
 
-var _getBasicDomNodeProfile = __webpack_require__(16);
+var _getBasicDomNodeProfile = _interopRequireDefault(__webpack_require__(16));
 
 var _getNParents = __webpack_require__(41);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
@@ -4165,7 +4169,7 @@ var getTextContent = function getTextContent(el, options) {
 
 function getDomNodeProfile(el) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  return _objectSpread({}, (0, _getBasicDomNodeProfile.getBasicDomNodeProfile)(el), {
+  return _objectSpread({}, (0, _getBasicDomNodeProfile["default"])(el), {
     action: el.action,
     method: el.method,
     n_parents: (0, _getNParents.getNParents)(el, options.nParents),
@@ -4218,7 +4222,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getNParents = getNParents;
 
-var _getBasicDomNodeProfile = __webpack_require__(16);
+var _getBasicDomNodeProfile = _interopRequireDefault(__webpack_require__(16));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
@@ -4233,7 +4239,7 @@ function getNParents(element) {
     return parents;
   }
 
-  return getNParents(parent, nParents - 1, parents.concat(_objectSpread({}, (0, _getBasicDomNodeProfile.getBasicDomNodeProfile)(parent), {
+  return getNParents(parent, nParents - 1, parents.concat(_objectSpread({}, (0, _getBasicDomNodeProfile["default"])(parent), {
     nth_parent: parents.length + 1
   })));
 }
