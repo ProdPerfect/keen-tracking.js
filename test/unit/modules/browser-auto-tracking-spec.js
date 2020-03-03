@@ -21,7 +21,7 @@ describe('Auto Tracking', () => {
   }
 
   beforeAll(() => {
-    ({ emit } = window["_virtualConsole"]);
+    ({ emit } = window['_virtualConsole']);
   });
 
   beforeEach(() => {

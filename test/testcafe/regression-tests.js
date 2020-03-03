@@ -90,10 +90,10 @@ test.requestHooks(logger)('2 Form submission', async t => {
 
   await t
     .expect(logger.requests.length).eql(4)
-    .expect(await logger.count((record) => /pageviews/.test(record.request.url) && record.response.statusCode === 204)).eql(1)
-    .expect(await logger.count((record) => /clicks/.test(record.request.url) && record.response.statusCode === 204)).eql(1)
-    .expect(await logger.count((record) => /form_submissions/.test(record.request.url) && record.response.statusCode === 204)).eql(1)
-    .expect(await logger.count((record) => /pageunloads/.test(record.request.url) && record.response.statusCode === 204)).eql(1);
+    .expect(await logger.count(record => /pageviews/.test(record.request.url) && record.response.statusCode === 204)).eql(1)
+    .expect(await logger.count(record => /clicks/.test(record.request.url) && record.response.statusCode === 204)).eql(1)
+    .expect(await logger.count(record => /form_submissions/.test(record.request.url) && record.response.statusCode === 204)).eql(1)
+    .expect(await logger.count(record => /pageunloads/.test(record.request.url) && record.response.statusCode === 204)).eql(1);
 });
 
 test.requestHooks(logger)('3 Input change', async t => {
@@ -107,7 +107,7 @@ test.requestHooks(logger)('3 Input change', async t => {
 
   await t
     .expect(logger.requests.length).eql(4)
-    .expect(await logger.count((record) => /pageviews/.test(record.request.url) && record.response.statusCode === 204)).eql(1)
-    .expect(await logger.count((record) => /clicks/.test(record.request.url) && record.response.statusCode === 204)).eql(2)
-    .expect(await logger.count((record) => /changes/.test(record.request.url) && record.response.statusCode === 204)).eql(1);
+    .expect(await logger.count(record => /pageviews/.test(record.request.url) && record.response.statusCode === 204)).eql(1)
+    .expect(await logger.count(record => /clicks/.test(record.request.url) && record.response.statusCode === 204)).eql(2)
+    .expect(await logger.count(record => /changes/.test(record.request.url) && record.response.statusCode === 204)).eql(1);
 });
