@@ -21,7 +21,7 @@ describe('Auto Tracking', () => {
   }
 
   beforeAll(() => {
-    ({ emit } = window._virtualConsole);
+    ({ emit } = window["_virtualConsole"]);
   });
 
   beforeEach(() => {
@@ -35,7 +35,7 @@ describe('Auto Tracking', () => {
     mockFn1.mockClear();
     client.initAutoTracking();
   });
-  
+
   afterAll(() => {
     window._virtualConsole.emit = emit;
   });
