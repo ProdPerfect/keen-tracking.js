@@ -29,7 +29,7 @@ describe('Auto Tracking', () => {
     mockFn1.mockClear();
     client.initAutoTracking();
   });
-  
+
   const extendedParams = {
     event_uuid: expect.any(String),
     geo: expect.any(Object),
