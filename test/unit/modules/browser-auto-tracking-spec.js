@@ -20,13 +20,7 @@ describe('Auto Tracking', () => {
     'test_run_id': '1'
   }
 
-  beforeAll(() => {
-    ({ emit } = window._virtualConsole);
-  });
-
   beforeEach(() => {
-    window._virtualConsole.emit = jest.fn();
-
     client = new KeenTracking(config);
     const cookie = KeenTracking.utils.cookie('prodperfect_test');
     cookie.set('test_run_data', prodperfectTestData);
@@ -35,11 +29,7 @@ describe('Auto Tracking', () => {
     mockFn1.mockClear();
     client.initAutoTracking();
   });
-
-  afterAll(() => {
-    window._virtualConsole.emit = emit;
-  });
-
+  
   const extendedParams = {
     event_uuid: expect.any(String),
     geo: expect.any(Object),
