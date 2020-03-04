@@ -1,13 +1,18 @@
 {
   "extends": ["airbnb-base"],
   "rules": {
+    "no-underscore-dangle": 0,
+    "newline-per-chained-call": 0
   },
   "globals": {
     "Atomics": readonly,
+    "emit": readonly,
     "jest": readonly,
     "test": readonly,
     "expect": readonly,
     "beforeEach": readonly,
+    "beforeAll": readonly,
+    "afterAll": readonly,
     "describe": readonly,
     "it": readonly,
     "document": readonly
