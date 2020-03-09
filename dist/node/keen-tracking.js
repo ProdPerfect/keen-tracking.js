@@ -1,4 +1,4 @@
-/*! P2_KEEN_VERSION: 2.0.19 */
+/*! P2_KEEN_VERSION: 2.0.20 */
 var Keen =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -572,7 +572,9 @@ var _configDefault = _interopRequireDefault(__webpack_require__(3));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -584,7 +586,7 @@ function queue() {
   }
 
   this.capacity = 0;
-  this.config = _objectSpread({}, _configDefault["default"].queue, configQueue);
+  this.config = _objectSpread({}, _configDefault["default"].queue, {}, configQueue);
   this.events = {// "collection-1": [],
     // "collection-2": []
   };
@@ -662,7 +664,7 @@ var _each = _interopRequireDefault(__webpack_require__(0));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function extendEvent(eventCollection, eventModifier) {
   if (arguments.length !== 2 || typeof eventCollection !== 'string' || 'object' !== _typeof(eventModifier) && 'function' !== typeof eventModifier) {
@@ -714,7 +716,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.deepExtend = void 0;
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var deepExtend = function deepExtend(target) {
   for (var i = 1; i < arguments.length; i++) {
@@ -864,11 +866,13 @@ var _unique = _interopRequireDefault(__webpack_require__(15));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 // ------------------------------
 // .recordEvent
@@ -1053,12 +1057,14 @@ var _configDefault = _interopRequireDefault(__webpack_require__(3));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _default(options) {
-  var configRetry = _objectSpread({}, _configDefault["default"].retry, options.retry || {});
+  var configRetry = _objectSpread({}, _configDefault["default"].retry, {}, options.retry || {});
 
   var retriesLimit = configRetry.limit;
   var retryInitialDelay = configRetry.initialDelay;
@@ -1183,14 +1189,16 @@ var _configDefault = _interopRequireDefault(__webpack_require__(3));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var uniqueIds = [];
 
 var isUnique = function isUnique(customCacheConfig, extendedEventBody) {
-  var configCache = _objectSpread({}, _configDefault["default"].cache, customCacheConfig.cache);
+  var configCache = _objectSpread({}, _configDefault["default"].cache, {}, customCacheConfig.cache);
 
   var stringifiedEvent = JSON.stringify(extendedEventBody);
   var hashingMethod = configCache.hashingMethod;
@@ -1373,11 +1381,13 @@ var _queue = __webpack_require__(5);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function deferEvent(eventCollection, eventBody) {
   if (arguments.length !== 2 || typeof eventCollection !== 'string') {
@@ -1570,7 +1580,7 @@ timer.prototype.clear = function () {
 /* 22 */
 /***/ (function(module) {
 
-module.exports = {"name":"prodperfect-keen-tracking","version":"2.0.19","upstreamVersion":"4.0.2","description":"ProdPerfect fork of the Data Collection SDK for Keen IO","main":"dist/node/keen-tracking.js","browser":"dist/keen-tracking.js","repository":{"type":"git","url":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js.git"},"scripts":{"start":"NODE_ENV=development webpack-dev-server","test":"NODE_ENV=test node_modules/.bin/jest && NODE_ENV=test TEST_ENV=node node_modules/.bin/jest","test:node":"NODE_ENV=test TEST_ENV=node node_modules/.bin/jest","test:watch":"NODE_ENV=test node_modules/.bin/jest --watch","test:node:watch":"NODE_ENV=test TEST_ENV=node node_modules/.bin/jest --watch","test:regression":"npm run build && node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve' --local","test:regression:browserstack:prod":"bash scripts/browserstack_prod.sh","test:regression:browserstack:beta":"bash scripts/browserstack_beta.sh","build":"NODE_ENV=production ./node_modules/.bin/webpack -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 ./node_modules/.bin/webpack -p && npm run build:node && npm run build:noop","build:node":"TARGET=node NODE_ENV=production ./node_modules/.bin/webpack -p","build:noop":"NODE_ENV=production ./node_modules/.bin/webpack --config webpack.noop.config.js -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 ./node_modules/.bin/webpack --config webpack.noop.config.js -p","deploy:canary-tier-1":"bash ./build_scripts/deploy_canary_tier_1.sh","deploy:canary-tier-1:noop":"bash ./build_scripts/noop_deploy_canary_tier_1.sh","deploy:canary-tier-2":"bash ./build_scripts/deploy_canary_tier_2.sh","deploy:production":"bash ./build_scripts/deploy_production.sh","profile":"webpack --profile --json > stats.json","analyze":"webpack-bundle-analyzer stats.json /dist","preversion":"npm run build && npm run test","demo":"node ./test/demo/index.node.js"},"bugs":"https://github.com/ProdPerfect/prodperfect-keen-tracking.js/issues","author":{"name":"ProdPerfect, Inc.","url":"https://www.prodperfect.com"},"upstreamAuthor":"Keen IO <team@keen.io> (https://keen.io/)","contributors":["Dustin Larimer <dustin@keen.io> (https://github.com/dustinlarimer)","Eric Anderson <eric@keen.io> (https://github.com/aroc)","Joe Wegner <joe@keen.io> (http://www.wegnerdesign.com)","Alex Kleissner <alex@keen.io> (https://github.com/hex337)","Adam Kasprowicz <adam.kasprowicz@keen.io> (https://github.com/adamkasprowicz)"],"license":"MIT","dependencies":{"component-emitter":"^1.2.0","js-cookie":"2.1.0","keen-core":"^0.1.3","promise-polyfill":"^8.0.0","whatwg-fetch":"^2.0.4"},"devDependencies":{"@babel/cli":"^7.0.0","@babel/core":"^7.0.0","@babel/plugin-proposal-class-properties":"^7.0.0","@babel/plugin-proposal-decorators":"^7.0.0","@babel/plugin-proposal-do-expressions":"^7.0.0","@babel/plugin-proposal-export-default-from":"^7.0.0","@babel/plugin-proposal-export-namespace-from":"^7.0.0","@babel/plugin-proposal-function-bind":"^7.0.0","@babel/plugin-proposal-function-sent":"^7.0.0","@babel/plugin-proposal-json-strings":"^7.0.0","@babel/plugin-proposal-logical-assignment-operators":"^7.0.0","@babel/plugin-proposal-nullish-coalescing-operator":"^7.0.0","@babel/plugin-proposal-numeric-separator":"^7.0.0","@babel/plugin-proposal-object-rest-spread":"^7.0.0","@babel/plugin-proposal-optional-chaining":"^7.0.0","@babel/plugin-proposal-pipeline-operator":"^7.0.0","@babel/plugin-proposal-throw-expressions":"^7.0.0","@babel/plugin-syntax-dynamic-import":"^7.0.0","@babel/plugin-syntax-import-meta":"^7.0.0","@babel/polyfill":"^7.0.0","@babel/preset-env":"^7.0.0","babel-jest":"^24.7.1","babel-loader":"^8.0.5","babel-plugin-transform-object-rest-spread":"^6.26.0","babel-polyfill":"^6.26.0","eslint":"^5.16.0","eslint-config-airbnb":"^17.1.0","eslint-loader":"^2.1.2","eslint-plugin-import":"^2.17.2","eslint-plugin-jsx-a11y":"^6.2.1","eslint-plugin-react":"^7.12.4","gulp":"^4.0.1","gulp-awspublish":"^4.0.0","gulp-connect":"^5.7.0","gulp-rename":"^1.2.2","gulp-replace":"^0.5.3","html-loader":"^0.5.5","html-webpack-plugin":"^3.2.0","http-server":"^0.11.1","jest":"^24.7.1","jest-fetch-mock":"^1.6.5","minimist":"^1.2.0","nock":"^9.2.6","regenerator-runtime":"^0.11.1","replace-in-file":"^3.4.0","testcafe":"^1.1.3","testcafe-browser-provider-browserstack":"^1.3.0","testcafe-browser-provider-puppeteer":"^1.4.0","testcafe-browser-provider-saucelabs":"^1.7.0","url-parse":"^1.4.3","webpack":"^4.30.0","webpack-bundle-analyzer":"^3.3.2","webpack-cli":"^3.3.1","webpack-dev-server":"^3.3.1","xhr-mock":"^2.3.2"}};
+module.exports = JSON.parse("{\"name\":\"prodperfect-keen-tracking\",\"version\":\"2.0.20\",\"upstreamVersion\":\"4.0.2\",\"description\":\"ProdPerfect fork of the Data Collection SDK for Keen IO\",\"main\":\"dist/node/keen-tracking.js\",\"browser\":\"dist/keen-tracking.js\",\"repository\":{\"type\":\"git\",\"url\":\"https://github.com/ProdPerfect/prodperfect-keen-tracking.js.git\"},\"scripts\":{\"start\":\"NODE_ENV=development webpack-dev-server\",\"test\":\"NODE_ENV=test node_modules/.bin/jest && NODE_ENV=test TEST_ENV=node node_modules/.bin/jest\",\"test:node\":\"NODE_ENV=test TEST_ENV=node node_modules/.bin/jest\",\"test:watch\":\"NODE_ENV=test node_modules/.bin/jest --watch\",\"test:node:watch\":\"NODE_ENV=test TEST_ENV=node node_modules/.bin/jest --watch\",\"test:regression\":\"npm run build && node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve' --local\",\"test:regression:browserstack:prod\":\"bash scripts/browserstack_prod.sh\",\"test:regression:browserstack:beta\":\"bash scripts/browserstack_beta.sh\",\"build\":\"NODE_ENV=production ./node_modules/.bin/webpack -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 ./node_modules/.bin/webpack -p && npm run build:node && npm run build:noop\",\"build:node\":\"TARGET=node NODE_ENV=production ./node_modules/.bin/webpack -p\",\"build:noop\":\"NODE_ENV=production ./node_modules/.bin/webpack --config webpack.noop.config.js -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 ./node_modules/.bin/webpack --config webpack.noop.config.js -p\",\"deploy:canary-tier-1\":\"bash ./build_scripts/deploy_canary_tier_1.sh\",\"deploy:canary-tier-1:noop\":\"bash ./build_scripts/noop_deploy_canary_tier_1.sh\",\"deploy:canary-tier-2\":\"bash ./build_scripts/deploy_canary_tier_2.sh\",\"deploy:production\":\"bash ./build_scripts/deploy_production.sh\",\"profile\":\"webpack --profile --json > stats.json\",\"analyze\":\"webpack-bundle-analyzer stats.json /dist\",\"preversion\":\"npm run build && npm run test\",\"demo\":\"node ./test/demo/index.node.js\"},\"bugs\":\"https://github.com/ProdPerfect/prodperfect-keen-tracking.js/issues\",\"author\":{\"name\":\"ProdPerfect, Inc.\",\"url\":\"https://www.prodperfect.com\"},\"upstreamAuthor\":\"Keen IO <team@keen.io> (https://keen.io/)\",\"contributors\":[\"Dustin Larimer <dustin@keen.io> (https://github.com/dustinlarimer)\",\"Eric Anderson <eric@keen.io> (https://github.com/aroc)\",\"Joe Wegner <joe@keen.io> (http://www.wegnerdesign.com)\",\"Alex Kleissner <alex@keen.io> (https://github.com/hex337)\",\"Adam Kasprowicz <adam.kasprowicz@keen.io> (https://github.com/adamkasprowicz)\"],\"license\":\"MIT\",\"dependencies\":{\"component-emitter\":\"^1.2.0\",\"js-cookie\":\"2.1.0\",\"keen-core\":\"^0.1.3\",\"promise-polyfill\":\"^8.0.0\",\"whatwg-fetch\":\"^2.0.4\"},\"devDependencies\":{\"@babel/cli\":\"^7.0.0\",\"@babel/core\":\"^7.0.0\",\"@babel/plugin-proposal-class-properties\":\"^7.0.0\",\"@babel/plugin-proposal-decorators\":\"^7.0.0\",\"@babel/plugin-proposal-do-expressions\":\"^7.0.0\",\"@babel/plugin-proposal-export-default-from\":\"^7.0.0\",\"@babel/plugin-proposal-export-namespace-from\":\"^7.0.0\",\"@babel/plugin-proposal-function-bind\":\"^7.0.0\",\"@babel/plugin-proposal-function-sent\":\"^7.0.0\",\"@babel/plugin-proposal-json-strings\":\"^7.0.0\",\"@babel/plugin-proposal-logical-assignment-operators\":\"^7.0.0\",\"@babel/plugin-proposal-nullish-coalescing-operator\":\"^7.0.0\",\"@babel/plugin-proposal-numeric-separator\":\"^7.0.0\",\"@babel/plugin-proposal-object-rest-spread\":\"^7.0.0\",\"@babel/plugin-proposal-optional-chaining\":\"^7.0.0\",\"@babel/plugin-proposal-pipeline-operator\":\"^7.0.0\",\"@babel/plugin-proposal-throw-expressions\":\"^7.0.0\",\"@babel/plugin-syntax-dynamic-import\":\"^7.0.0\",\"@babel/plugin-syntax-import-meta\":\"^7.0.0\",\"@babel/polyfill\":\"^7.0.0\",\"@babel/preset-env\":\"^7.0.0\",\"babel-jest\":\"^24.7.1\",\"babel-loader\":\"^8.0.5\",\"babel-plugin-transform-object-rest-spread\":\"^6.26.0\",\"babel-polyfill\":\"^6.26.0\",\"eslint\":\"^5.16.0\",\"eslint-config-airbnb\":\"^17.1.0\",\"eslint-loader\":\"^2.1.2\",\"eslint-plugin-import\":\"^2.17.2\",\"eslint-plugin-jsx-a11y\":\"^6.2.1\",\"eslint-plugin-react\":\"^7.12.4\",\"gulp\":\"^4.0.1\",\"gulp-awspublish\":\"^4.0.0\",\"gulp-connect\":\"^5.7.0\",\"gulp-rename\":\"^1.2.2\",\"gulp-replace\":\"^0.5.3\",\"html-loader\":\"^0.5.5\",\"html-webpack-plugin\":\"^3.2.0\",\"http-server\":\"^0.11.1\",\"jest\":\"^24.7.1\",\"jest-fetch-mock\":\"^1.6.5\",\"minimist\":\"^1.2.0\",\"nock\":\"^9.2.6\",\"regenerator-runtime\":\"^0.11.1\",\"replace-in-file\":\"^3.4.0\",\"testcafe\":\"^1.1.3\",\"testcafe-browser-provider-browserstack\":\"^1.3.0\",\"testcafe-browser-provider-puppeteer\":\"^1.4.0\",\"testcafe-browser-provider-saucelabs\":\"^1.7.0\",\"url-parse\":\"^1.4.3\",\"webpack\":\"^4.30.0\",\"webpack-bundle-analyzer\":\"^3.3.2\",\"webpack-cli\":\"^3.3.1\",\"webpack-dev-server\":\"^3.3.1\",\"xhr-mock\":\"^2.3.2\"}}");
 
 /***/ })
 /******/ ])["default"];
