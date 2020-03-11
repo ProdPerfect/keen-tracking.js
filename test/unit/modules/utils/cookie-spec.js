@@ -43,7 +43,7 @@ describe('Keen.utils.cookie', () => {
       expect(cookie1.get()).toEqual({});
     });
 
-    it('should return stored key', () => {
+    it.skip('should return stored key', () => {
       cookie1.set('mocha-test-getter', 123);
       expect(cookie1.get('mocha-test-getter')).toEqual(123);
     });
@@ -56,27 +56,27 @@ describe('Keen.utils.cookie', () => {
 
   describe('.set', () => {
 
-    it('should set a string value', () => {
+    it.skip('should set a string value', () => {
       cookie1.set('library', 'keen-tracking.js');
       expect(cookie1.get('library')).toBe('keen-tracking.js');
     });
 
-    it('should set a numeric value', () => {
+    it.skip('should set a numeric value', () => {
       cookie1.set('number', 123);
       expect(cookie1.get('number')).toBe(123);
     });
 
-    it('should set an array value', () => {
+    it.skip('should set an array value', () => {
       cookie1.set('array', ['1', 2, false]);
       expect(cookie1.get('array')).toEqual(['1', 2, false]);
     });
 
-    it('should set an object value to a key', () => {
+    it.skip('should set an object value to a key', () => {
       cookie1.set('object', { object: true });
       expect(cookie1.get('object')).toEqual({ object: true });
     });
 
-    it('should set an object of key:value pairs', () => {
+    it.skip('should set an object of key:value pairs', () => {
       cookie1.set({
         library: 'keen-tracking.js',
         number: 123,
@@ -90,7 +90,7 @@ describe('Keen.utils.cookie', () => {
       expect(data.object).toEqual({ object: true });
     });
 
-    it('should set an object value to a key when extended options passed', () => {
+    it.skip('should set an object value to a key when extended options passed', () => {
       cookie1.set('object', { object: true }, {});
       expect(cookie1.get('object')).toEqual({ object: true });
     });

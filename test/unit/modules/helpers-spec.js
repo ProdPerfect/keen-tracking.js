@@ -2,7 +2,7 @@ import { getBrowserProfile } from '../../../lib/helpers/getBrowserProfile';
 import { getDatetimeIndex } from '../../../lib/helpers/getDatetimeIndex';
 import { getDomainName } from '../../../lib/helpers/getDomainName';
 import { getDomNodePath } from '../../../lib/helpers/getDomNodePath';
-import { getDomNodeProfile } from '../../../lib/helpers/getDomNodeProfile';
+import getDomNodeProfile from '../../../lib/helpers/getDomNodeProfile';
 import { getScreenProfile } from '../../../lib/helpers/getScreenProfile';
 import { getScrollState } from '../../../lib/helpers/getScrollState';
 import { getUniqueId } from '../../../lib/helpers/getUniqueId';
