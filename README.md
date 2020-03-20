@@ -58,3 +58,11 @@ Line 11: the `writeKey` is unique
 Line 13: `test` is replaced with customer name
 
 `host: 'test.datapipe.prodperfect.com/v1'`
+
+------------------------------------------
+
+## ProdPerfect Internal Documentation
+
+These documents are inaccessible to the public, but are crucial to our developers. They have to do with how we deploy changes to the Tracking Library, including our processes on code review, security checks, style conventions, test coverage, canary stepped-rollouts and rollbacks. If you're curious about their contents, send us your resume and we'll let you know :)
+
+[Developer Workflow](https://docs.google.com/document/d/1dftRP4kEHfd4I2QzgePO5XB1Mzz5J--hpdLy5ky_7vc) | [Style Guide](https://docs.google.com/document/d/1HHhCFOMY2ZF6whiF-L-xy9wzUUPQz8zZ_o_YZEJCOmg)
