@@ -20,7 +20,6 @@
 
       var options = {
         ignoreDisabledFormFields: false,
-        ignoreFormFieldTypes: ['password', 'email'],
         recordClicks: true,
         recordFormSubmits: true,
         recordInputChanges: true,
