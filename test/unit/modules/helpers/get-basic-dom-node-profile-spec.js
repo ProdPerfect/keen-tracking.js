@@ -1,8 +1,8 @@
-import { getBasicDomNodeProfile } from '../../../../lib/helpers/getBasicDomNodeProfile';
+import getBasicDomNodeProfile from '../../../../lib/helpers/getBasicDomNodeProfile';
 
 describe('ProdPerfectRecorder.helpers.getBasicDomNodeProfile', () => {
   const elP = document.createElement('p');
-  elP.setAttribute('aria-foo', 'yes')
+  elP.setAttribute('aria-foo', 'yes');
   elP.setAttribute('class', 'styled');
   elP.setAttribute('for', 'ProdPerfectRecorder');
   elP.setAttribute('id', 'myID');
@@ -11,8 +11,8 @@ describe('ProdPerfectRecorder.helpers.getBasicDomNodeProfile', () => {
   elP.setAttribute('title', 'myTitle');
   elP.setAttribute('name', 'testEl');
   elP.name = 'testEl';
-  elP.text ='myText';
-  elP.textContent ='myTextContent';
+  elP.text = 'myText';
+  elP.textContent = 'myTextContent';
   elP.style.cursor = 'pointer';
 
   const expectedP = {
@@ -32,11 +32,11 @@ describe('ProdPerfectRecorder.helpers.getBasicDomNodeProfile', () => {
     offsetLeft: null, // requires hack that I couldn't get working to work with JSDom
     parentNode: null,
     tagName: 'P',
-    text: 'myText',
+    text: null,
     textContent: 'myTextContent',
     title: 'myTitle',
-    type: undefined
-  }
+    type: null,
+  };
 
   const elSelect = document.createElement('select');
   const option1 = document.createElement('option');
@@ -66,7 +66,7 @@ describe('ProdPerfectRecorder.helpers.getBasicDomNodeProfile', () => {
       tag_name: expectedP.tagName,
       text: expectedP.text,
       title: expectedP.title,
-      type: expectedP.type
+      type: expectedP.type,
     })
   })
 
