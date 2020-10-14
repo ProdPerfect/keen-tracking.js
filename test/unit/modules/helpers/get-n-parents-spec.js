@@ -51,7 +51,7 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         all_attrs: { id: 'pid' },
         node_name: 'P',
         tag_name: 'P',
-        text: null,
+        text: 'ptext',
         title: null,
         type: null,
         href: null,
@@ -175,7 +175,7 @@ describe('RecordingLibrary.helpers.getNParents', () => {
       tag_name: 'FORM',
       text: null,
       title: null,
-      type: 'form',
+      type: null,
       nth_parent: 1,
     }]);
   });

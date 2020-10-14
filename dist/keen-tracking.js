@@ -1423,9 +1423,9 @@ function getBasicDomNodeProfile(el) {
     all_attrs: (0, _getDomNodeAttributes.getDomNodeAttributes)(el, EXCLUDE_VALUE_REGEX),
     node_name: _typeof(el.nodeName) === 'object' ? 'FORM' : el.nodeName,
     tag_name: _typeof(el.tagName) === 'object' ? 'FORM' : el.tagName,
-    text: getAttr(el, 'text'),
-    title: getAttr(el, 'title'),
-    type: getAttr(el, 'type')
+    text: el.text ? el.text : null,
+    title: el.title ? el.title : null,
+    type: el.type ? el.type : null
   };
 }
 
