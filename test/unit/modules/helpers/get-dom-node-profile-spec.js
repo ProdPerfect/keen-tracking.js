@@ -94,7 +94,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
       name: expectedP.name,
       n_parents: [],
       node_name: expectedP.nodeName,
-      selector: '',
+      selector: null,
       tag_name: expectedP.tagName,
       text: expectedP.text,
       text_content: null,
@@ -110,7 +110,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
   test('should return textContent when text content is requested', () => {
     expect(getDomNodeProfile(elP, { recordTextContent: true }).text_content).toEqual(expectedP.textContent);
   });
-
+  
   test('should return redacted textContent when text content redaction is requested', () => {
     expect(getDomNodeProfile(elP, {
       recordTextContent: true,
@@ -137,7 +137,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
       },
       n_parents: [],
       node_name: expectedA.nodeName,
-      selector: '',
+      selector: null,
       tag_name: expectedA.tagName,
       text: expectedA.text,
       text_content: null,
