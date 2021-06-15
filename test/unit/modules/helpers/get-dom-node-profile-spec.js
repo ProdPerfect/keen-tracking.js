@@ -110,7 +110,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
   test('should return textContent when text content is requested', () => {
     expect(getDomNodeProfile(elP, { recordTextContent: true }).text_content).toEqual(expectedP.textContent);
   });
-  
+
   test('should return redacted textContent when text content redaction is requested', () => {
     expect(getDomNodeProfile(elP, {
       recordTextContent: true,
