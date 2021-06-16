@@ -3,15 +3,14 @@ import { getNParents } from '../../../../lib/helpers/getNParents';
 describe('RecordingLibrary.helpers.getNParents', () => {
   const node = document.createElement('strong');
   const p1 = document.createElement('span');
+  document.body.appendChild(p1);
   p1.setAttribute('class', 'span-class');
 
   const p2 = document.createElement('p');
   p2.setAttribute('id', 'pid');
-  p2.text = 'ptext'
 
   const p3 = document.createElement('div');
   p3.setAttribute('name', 'divname');
-  p3.name = 'divname'
 
   const p4 = document.createElement('a');
   p4.setAttribute('href', '#foo');
@@ -20,7 +19,7 @@ describe('RecordingLibrary.helpers.getNParents', () => {
   const p5 = document.createElement('h1');
   p5.setAttribute('title', 'h1title');
 
-  const p6 = document.createElement('body');
+  const p6 = document.body;
 
   p6.appendChild(p5);
   p5.appendChild(p4);
@@ -35,7 +34,10 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         class: 'span-class',
         id: null,
         name: null,
-        all_attrs: { class: 'span-class' },
+        all_attrs: {
+          class: 'span-class',
+          unique_selector: '.span-class',
+        },
         node_name: 'SPAN',
         tag_name: 'SPAN',
         text: null,
@@ -48,7 +50,10 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         class: null,
         id: 'pid',
         name: null,
-        all_attrs: { id: 'pid' },
+        all_attrs: {
+          id: 'pid',
+          unique_selector: '#pid'
+        },
         node_name: 'P',
         tag_name: 'P',
         text: null,
@@ -61,7 +66,10 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         class: null,
         id: null,
         name: 'divname',
-        all_attrs: { name: 'divname' },
+        all_attrs: {
+          name: 'divname',
+          unique_selector: 'div'
+        },
         node_name: 'DIV',
         tag_name: 'DIV',
         text: null,
@@ -74,7 +82,11 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         class: null,
         id: null,
         name: null,
-        all_attrs: { href: '#foo', type: 'submit' },
+        all_attrs: {
+          href: '#foo',
+          type: 'submit',
+          unique_selector: 'a'
+        },
         node_name: 'A',
         tag_name: 'A',
         text: null,
@@ -87,7 +99,10 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         class: null,
         id: null,
         name: null,
-        all_attrs: { title: 'h1title' },
+        all_attrs: {
+          title: 'h1title',
+          unique_selector: 'h1',
+        },
         node_name: 'H1',
         tag_name: 'H1',
         text: null,
@@ -105,7 +120,10 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         class: 'span-class',
         id: null,
         name: null,
-        all_attrs: { class: 'span-class' },
+        all_attrs: {
+          class: 'span-class',
+          unique_selector: '.span-class',
+        },
         node_name: 'SPAN',
         tag_name: 'SPAN',
         text: null,
@@ -117,17 +135,15 @@ describe('RecordingLibrary.helpers.getNParents', () => {
     ]);
   });
 
-  test('should return an empty array if there are no parents', () => {
-    expect(getNParents(p6)).toEqual([]);
-  });
-
   test('should return all parents if there are less than n_parents present', () => {
     expect(getNParents(p5)).toEqual([
       {
         class: null,
         id: null,
         name: null,
-        all_attrs: {},
+        all_attrs: {
+          unique_selector: 'body',
+        },
         href: null,
         node_name: 'BODY',
         tag_name: 'BODY',
@@ -136,6 +152,36 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         type: null,
         nth_parent: 1,
       },
+      {
+        class: null,
+        id: null,
+        name: null,
+        all_attrs: {
+          unique_selector: 'html',
+        },
+        href: null,
+        node_name: 'HTML',
+        tag_name: 'HTML',
+        text: null,
+        title: null,
+        type: null,
+        nth_parent: 2,
+      },
+      {
+        class: null,
+        id: null,
+        name: null,
+        all_attrs: {
+          unique_selector: null,
+        },
+        href: null,
+        node_name: '#document',
+        tag_name: undefined,
+        text: null,
+        title: null,
+        type: null,
+        nth_parent: 3,
+      }
     ]);
   });
 
@@ -160,23 +206,72 @@ describe('RecordingLibrary.helpers.getNParents', () => {
     const inputEl4 = document.createElement('input');
     inputEl4.setAttribute('id', 'class');
     formEl.appendChild(inputEl4);
+    document.body.appendChild(formEl);
 
-    expect(getNParents(inputEl)).toEqual([{
-      class: 'some-class',
-      id: 'parent-form',
-      name: null,
-      all_attrs: {
+    expect(getNParents(inputEl)).toEqual([
+      {
         class: 'some-class',
         id: 'parent-form',
+        name: null,
+        all_attrs: {
+          class: 'some-class',
+          id: 'parent-form',
+          type: 'form',
+          unique_selector: '#parent-form',
+        },
+        href: null,
+        node_name: 'FORM',
+        tag_name: 'FORM',
+        text: null,
+        title: null,
         type: 'form',
+        nth_parent: 1,
       },
-      href: null,
-      node_name: 'FORM',
-      tag_name: 'FORM',
-      text: null,
-      title: null,
-      type: 'form',
-      nth_parent: 1,
-    }]);
+      {
+        class: null,
+        id: null,
+        name: null,
+        all_attrs: {
+          unique_selector: 'body',
+        },
+        href: null,
+        node_name: 'BODY',
+        tag_name: 'BODY',
+        text: null,
+        title: null,
+        type: null,
+        nth_parent: 2,
+      },
+      {
+        class: null,
+        id: null,
+        name: null,
+        all_attrs: {
+          unique_selector: 'html',
+        },
+        href: null,
+        node_name: 'HTML',
+        tag_name: 'HTML',
+        text: null,
+        title: null,
+        type: null,
+        nth_parent: 3,
+      },
+      {
+        class: null,
+        id: null,
+        name: null,
+        all_attrs: {
+          unique_selector: null,
+        },
+        href: null,
+        node_name: '#document',
+        tag_name: undefined,
+        text: null,
+        title: null,
+        type: null,
+        nth_parent: 4,
+      }
+    ]);
   });
 });

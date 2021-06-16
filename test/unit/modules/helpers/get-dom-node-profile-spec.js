@@ -2,7 +2,7 @@ import getDomNodeProfile from '../../../../lib/helpers/getDomNodeProfile';
 
 describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
   const elP = document.createElement('p');
-  elP.setAttribute('aria-foo', 'yes')
+  elP.setAttribute('aria-foo', 'yes');
   elP.setAttribute('class', 'styled');
   elP.setAttribute('for', 'ProdPerfectRecorder');
   elP.setAttribute('id', 'myID');
@@ -14,6 +14,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
   elP.text = 'myText';
   elP.textContent = 'myTextContent';
   elP.style.cursor = 'pointer';
+  document.body.appendChild(elP);
 
   const expectedP = {
     action: undefined,
@@ -48,6 +49,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
   elA.style.cursor = 'foo';
   elA.name = 'testA';
   elA.textContent ='myATextContent';
+  document.body.appendChild(elA);
 
   const expectedA = {
     action: '/my_action',
@@ -70,7 +72,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
     title: 'myATitle',
     type: 'submit',
     valueAttr: 'myAVal'
-  }
+  };
 
   test('should return relevant properties of the passed element, without textContent when not requested', () => {
     const expectedProfile = {
@@ -85,6 +87,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
         'ng-model': expectedP['ng-model'],
         style: `cursor: ${expectedP.cursor};`,
         title: expectedP.title,
+        unique_selector: expect.any(String)
       },
       class: expectedP.className,
       cursor: 'pointer',
@@ -92,9 +95,9 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
       id: expectedP.id,
       method: expectedP.method,
       name: expectedP.name,
-      n_parents: [],
+      n_parents: expect.any(Array),
       node_name: expectedP.nodeName,
-      selector: '',
+      selector: expect.any(String),
       tag_name: expectedP.tagName,
       text: expectedP.text,
       text_content: null,
@@ -132,12 +135,12 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
         name: expectedA.name,
         style: 'cursor: foo;',
         title: expectedA.title,
-        type: expectedA.type
-
+        type: expectedA.type,
+        unique_selector: expect.any(String)
       },
-      n_parents: [],
+      n_parents: expect.any(Array),
       node_name: expectedA.nodeName,
-      selector: '',
+      selector: expect.any(String),
       tag_name: expectedA.tagName,
       text: expectedA.text,
       text_content: null,
