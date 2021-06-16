@@ -87,7 +87,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
         'ng-model': expectedP['ng-model'],
         style: `cursor: ${expectedP.cursor};`,
         title: expectedP.title,
-        unique_selector: expect.any(String)
+        unique_selector: expect.any(String),
       },
       class: expectedP.className,
       cursor: 'pointer',
@@ -136,7 +136,7 @@ describe('ProdPerfectRecorder.helpers.getDomNodeProfile', () => {
         style: 'cursor: foo;',
         title: expectedA.title,
         type: expectedA.type,
-        unique_selector: expect.any(String)
+        unique_selector: expect.any(String),
       },
       n_parents: expect.any(Array),
       node_name: expectedA.nodeName,

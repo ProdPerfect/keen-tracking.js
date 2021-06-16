@@ -52,7 +52,7 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         name: null,
         all_attrs: {
           id: 'pid',
-          unique_selector: '#pid'
+          unique_selector: '#pid',
         },
         node_name: 'P',
         tag_name: 'P',
@@ -68,7 +68,7 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         name: 'divname',
         all_attrs: {
           name: 'divname',
-          unique_selector: 'div'
+          unique_selector: 'div',
         },
         node_name: 'DIV',
         tag_name: 'DIV',
@@ -85,7 +85,7 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         all_attrs: {
           href: '#foo',
           type: 'submit',
-          unique_selector: 'a'
+          unique_selector: 'a',
         },
         node_name: 'A',
         tag_name: 'A',
@@ -181,7 +181,7 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         title: null,
         type: null,
         nth_parent: 3,
-      }
+      },
     ]);
   });
 
@@ -271,7 +271,7 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         title: null,
         type: null,
         nth_parent: 4,
-      }
+      },
     ]);
   });
 });
