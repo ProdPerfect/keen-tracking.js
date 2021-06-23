@@ -1406,13 +1406,13 @@ var _getDomNodeAttributes = __webpack_require__(50);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 // We don't want to capture any value-like attributes, to avoid
 // inadvertently grabbing PII.
@@ -1427,23 +1427,32 @@ function getAttr(el, name) {
 }
 
 function getBasicDomNodeProfile(el) {
+  var all_attrs = (0, _getDomNodeAttributes.getDomNodeAttributes)(el, EXCLUDE_VALUE_REGEX);
+  /**
+   * This is a short, unique CSS selector for quickly grabbing this node from the DOM.
+   * It serves a different purpose than a full node 'path', which potentially holds
+   * much more information about the DOM structure.
+   *
+   * NOTE(dabrady) We are putting this in the `all_attrs` blob out of a variety of
+   * concerns, but primarily because it will let us evalutate our use-case for this
+   * data faster and with minimal effort.
+   */
+
+  var unique_selector = (0, _uniqueSelector["default"])(el);
+
+  if (unique_selector) {
+    // Don't include unique_selector if it doesn't have a value.
+    all_attrs = _objectSpread({}, all_attrs, {
+      unique_selector: unique_selector
+    });
+  }
+
   return {
     "class": getAttr(el, 'class') || null,
     href: (_typeof(el.href) === 'object' ? null : el.href) || null,
     id: getAttr(el, 'id') || null,
     name: getAttr(el, 'name') || null,
-    all_attrs: _objectSpread({}, (0, _getDomNodeAttributes.getDomNodeAttributes)(el, EXCLUDE_VALUE_REGEX), {
-      /**
-       * This is a short, unique CSS selector for quickly grabbing this node from the DOM.
-       * It serves a different purpose than a full node 'path', which potentially holds
-       * much more information about the DOM structure.
-       *
-       * NOTE(dabrady) We are putting this in the `all_attrs` blob out of a variety of
-       * concerns, but primarily because it will let us evalutate our use-case for this
-       * data faster and with minimal effort.
-       */
-      unique_selector: (0, _uniqueSelector["default"])(el)
-    }),
+    all_attrs: all_attrs,
     node_name: _typeof(el.nodeName) === 'object' ? 'FORM' : el.nodeName,
     tag_name: _typeof(el.tagName) === 'object' ? 'FORM' : el.tagName,
     text: getAttr(el, 'text'),
