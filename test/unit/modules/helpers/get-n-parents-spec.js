@@ -171,9 +171,7 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         class: null,
         id: null,
         name: null,
-        all_attrs: {
-          unique_selector: null,
-        },
+        all_attrs: {},
         href: null,
         node_name: '#document',
         tag_name: undefined,
@@ -261,9 +259,7 @@ describe('RecordingLibrary.helpers.getNParents', () => {
         class: null,
         id: null,
         name: null,
-        all_attrs: {
-          unique_selector: null,
-        },
+        all_attrs: {},
         href: null,
         node_name: '#document',
         tag_name: undefined,
