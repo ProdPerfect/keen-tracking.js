@@ -14,6 +14,7 @@ describe('ProdPerfectRecorder.helpers.getBasicDomNodeProfile', () => {
   elP.text = 'myText';
   elP.textContent = 'myTextContent';
   elP.style.cursor = 'pointer';
+  document.body.appendChild(elP);
 
   const expectedP = {
     action: undefined,
@@ -44,6 +45,7 @@ describe('ProdPerfectRecorder.helpers.getBasicDomNodeProfile', () => {
   option1.text = 'Bar Text';
   option1.selected = true;
   elSelect.appendChild(option1);
+  document.body.appendChild(elSelect);
 
   test('should return a small dom node profile', () => {
     expect(getBasicDomNodeProfile(elP)).toEqual({
@@ -61,16 +63,18 @@ describe('ProdPerfectRecorder.helpers.getBasicDomNodeProfile', () => {
         "ng-model": expectedP['ng-model'],
         style: `cursor: ${expectedP.cursor};`,
         title: expectedP.title,
+        unique_selector: expect.any(String),
       },
       node_name: expectedP.nodeName,
       tag_name: expectedP.tagName,
       text: expectedP.text,
       title: expectedP.title,
       type: expectedP.type,
-    })
-  })
+    });
+  });
 
   test('should exclude value from all_attrs', () => {
-    expect(getBasicDomNodeProfile(elSelect).value).toEqual(undefined)
-  })
+    expect(elSelect.value).toEqual(expect.any(String));
+    expect(getBasicDomNodeProfile(elSelect).value).toBeUndefined();
+  });
 });

@@ -83,7 +83,7 @@ var Keen =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 18);
+/******/ 	return __webpack_require__(__webpack_require__.s = 19);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -214,7 +214,7 @@ exports["default"] = _default;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
 /* harmony import */ var _finally__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
 
 
@@ -286,7 +286,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _keenCore = _interopRequireDefault(__webpack_require__(20));
+var _keenCore = _interopRequireDefault(__webpack_require__(21));
 
 var _each = _interopRequireDefault(__webpack_require__(0));
 
@@ -1400,15 +1400,50 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = getBasicDomNodeProfile;
 
-var _getDomNodeAttributes = __webpack_require__(40);
+var _uniqueSelector = _interopRequireDefault(__webpack_require__(41));
+
+var _getDomNodeAttributes = __webpack_require__(50);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+// We don't want to capture any value-like attributes, to avoid
+// inadvertently grabbing PII.
 var EXCLUDE_VALUE_REGEX = /^((?!value).)*$/;
 
 function getAttr(el, name) {
   if (el.getAttribute) {
     return el.getAttribute(name);
+  }
+
+  return null;
+}
+/**
+ * This is a short, unique CSS selector for quickly grabbing this node from the DOM.
+ * It serves a different purpose than a full node 'path', which potentially holds
+ * much more information about the DOM structure.
+ */
+
+
+function generateUniqueSelector(el) {
+  // NOTE(dabrady) The `unique-selector` library assumes the given node is part of a DOM, and will
+  // throw errors if that's not true. So guarding against that here.
+  if (document.contains(el)) {
+    try {
+      return (0, _uniqueSelector["default"])(el);
+    } catch (TypeError) {
+      // NOTE(dabrady) If the target element is not part of the DOM by the time `uniqueSelector`
+      // tries to traverse the element's parent tree, it will throw a null-pointer exception. This
+      // try-catch prevents those errors from bubbling up to our clients' applications.
+      return null;
+    }
   }
 
   return null;
@@ -1420,7 +1455,15 @@ function getBasicDomNodeProfile(el) {
     href: (_typeof(el.href) === 'object' ? null : el.href) || null,
     id: getAttr(el, 'id') || null,
     name: getAttr(el, 'name') || null,
-    all_attrs: (0, _getDomNodeAttributes.getDomNodeAttributes)(el, EXCLUDE_VALUE_REGEX),
+    all_attrs: _objectSpread({}, (0, _getDomNodeAttributes.getDomNodeAttributes)(el, EXCLUDE_VALUE_REGEX), {
+      /**
+       * NOTE(dabrady) We are putting this in the `all_attrs` blob out of a variety of
+       * concerns, but primarily because it will let us evalutate our use-case for this
+       * data faster and with minimal effort.
+       */
+      // Don't include uniqueSelector if it couldn't be calculated.
+      unique_selector: generateUniqueSelector(el) || undefined
+    }),
     node_name: _typeof(el.nodeName) === 'object' ? 'FORM' : el.nodeName,
     tag_name: _typeof(el.tagName) === 'object' ? 'FORM' : el.tagName,
     text: getAttr(el, 'text'),
@@ -1431,6 +1474,34 @@ function getBasicDomNodeProfile(el) {
 
 /***/ }),
 /* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.isElement = isElement;
+/**
+ * Determines if the passed el is a DOM element
+ */
+function isElement(el) {
+  var isElem = void 0;
+
+  if ((typeof HTMLElement === 'undefined' ? 'undefined' : _typeof(HTMLElement)) === 'object') {
+    isElem = el instanceof HTMLElement;
+  } else {
+    isElem = !!el && (typeof el === 'undefined' ? 'undefined' : _typeof(el)) === 'object' && el.nodeType === 1 && typeof el.nodeName === 'string';
+  }
+  return isElem;
+}
+
+/***/ }),
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1688,17 +1759,17 @@ Promise._unhandledRejectionFn = function _unhandledRejectionFn(err) {
 
 /* harmony default export */ __webpack_exports__["a"] = (Promise);
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(25).setImmediate))
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(19);
-
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(26).setImmediate))
 
 /***/ }),
 /* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(20);
+
+
+/***/ }),
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1715,41 +1786,41 @@ var _each = _interopRequireDefault(__webpack_require__(0));
 
 var _extend = _interopRequireDefault(__webpack_require__(1));
 
-var _listener = __webpack_require__(23);
+var _listener = __webpack_require__(24);
 
-var _recordEventsBrowser = __webpack_require__(24);
+var _recordEventsBrowser = __webpack_require__(25);
 
-var _deferEvents = __webpack_require__(32);
+var _deferEvents = __webpack_require__(33);
 
 var _extendEvents = __webpack_require__(10);
 
-var _browserAutoTracking = _interopRequireDefault(__webpack_require__(33));
+var _browserAutoTracking = _interopRequireDefault(__webpack_require__(34));
 
-var _getBrowserProfile = __webpack_require__(36);
+var _getBrowserProfile = __webpack_require__(37);
 
-var _getDatetimeIndex = __webpack_require__(37);
+var _getDatetimeIndex = __webpack_require__(38);
 
-var _getDomainName = __webpack_require__(38);
+var _getDomainName = __webpack_require__(39);
 
 var _getDomNodePath = __webpack_require__(15);
 
-var _getDomNodeProfile = _interopRequireDefault(__webpack_require__(39));
+var _getDomNodeProfile = _interopRequireDefault(__webpack_require__(40));
 
 var _getScreenProfile = __webpack_require__(13);
 
-var _getScrollState = __webpack_require__(42);
+var _getScrollState = __webpack_require__(52);
 
-var _getUniqueId = __webpack_require__(43);
+var _getUniqueId = __webpack_require__(53);
 
 var _getWindowProfile = __webpack_require__(14);
 
-var _cookie = __webpack_require__(44);
+var _cookie = __webpack_require__(54);
 
 var _deepExtend = __webpack_require__(11);
 
-var _serializeForm = __webpack_require__(46);
+var _serializeForm = __webpack_require__(56);
 
-var _timer = __webpack_require__(47);
+var _timer = __webpack_require__(57);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -1831,15 +1902,15 @@ var _default = Keen;
 exports["default"] = _default;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {(function(env){
   var previousKeen = env.Keen || undefined;
   var each = __webpack_require__(0),
       extend = __webpack_require__(1),
-      parseParams = __webpack_require__(21),
-      serialize = __webpack_require__(22);
+      parseParams = __webpack_require__(22),
+      serialize = __webpack_require__(23);
 
   var Emitter = __webpack_require__(7);
 
@@ -2066,7 +2137,7 @@ exports["default"] = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports) {
 
 module.exports = parseParams;
@@ -2088,7 +2159,7 @@ function parseParams(str){
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var each = __webpack_require__(0),
@@ -2109,7 +2180,7 @@ function serialize(data){
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2287,7 +2358,7 @@ function matches(elem, selector) {
 }
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2303,7 +2374,7 @@ __webpack_require__(4);
 
 __webpack_require__(8);
 
-var _base = _interopRequireDefault(__webpack_require__(28));
+var _base = _interopRequireDefault(__webpack_require__(29));
 
 var _each = _interopRequireDefault(__webpack_require__(0));
 
@@ -2313,9 +2384,9 @@ var _index = _interopRequireDefault(__webpack_require__(6));
 
 var _extendEvents = __webpack_require__(10);
 
-var _fetchRetry = _interopRequireDefault(__webpack_require__(29));
+var _fetchRetry = _interopRequireDefault(__webpack_require__(30));
 
-var _unique = _interopRequireDefault(__webpack_require__(30));
+var _unique = _interopRequireDefault(__webpack_require__(31));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -2665,7 +2736,7 @@ function sendBeacon(url, callback) {
 }
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -2721,7 +2792,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(26);
+__webpack_require__(27);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -2735,7 +2806,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2)))
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -2925,10 +2996,10 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2), __webpack_require__(27)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(2), __webpack_require__(28)))
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -3118,7 +3189,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -3170,7 +3241,7 @@ module.exports = {
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3245,7 +3316,7 @@ function _default(url, options) {
 ;
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3260,7 +3331,7 @@ __webpack_require__(4);
 
 var _md = _interopRequireDefault(__webpack_require__(12));
 
-var _cacheBrowser = __webpack_require__(31);
+var _cacheBrowser = __webpack_require__(32);
 
 var _configDefault = _interopRequireDefault(__webpack_require__(3));
 
@@ -3328,7 +3399,7 @@ var _default = isUnique;
 exports["default"] = _default;
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3494,7 +3565,7 @@ var getFromCache = function getFromCache(hash) {
 exports.getFromCache = getFromCache;
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3617,7 +3688,7 @@ function handleValidationError(message) {
 }
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3628,9 +3699,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = initAutoTrackingCore;
 
-var _package = _interopRequireDefault(__webpack_require__(34));
+var _package = _interopRequireDefault(__webpack_require__(35));
 
-var _eventSampler = _interopRequireDefault(__webpack_require__(35));
+var _eventSampler = _interopRequireDefault(__webpack_require__(36));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -3946,13 +4017,13 @@ function getMiliSecondsSinceDate(date) {
 }
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module) {
 
-module.exports = JSON.parse("{\"name\":\"prodperfect-keen-tracking\",\"version\":\"2.0.23\",\"upstreamVersion\":\"4.0.2\",\"description\":\"ProdPerfect fork of the Data Collection SDK for Keen IO\",\"main\":\"dist/node/keen-tracking.js\",\"browser\":\"dist/keen-tracking.js\",\"repository\":{\"type\":\"git\",\"url\":\"https://github.com/ProdPerfect/prodperfect-keen-tracking.js.git\"},\"scripts\":{\"start\":\"NODE_ENV=development webpack-dev-server\",\"test\":\"NODE_ENV=test node_modules/.bin/jest && NODE_ENV=test TEST_ENV=node node_modules/.bin/jest\",\"test:node\":\"NODE_ENV=test TEST_ENV=node node_modules/.bin/jest\",\"test:watch\":\"NODE_ENV=test node_modules/.bin/jest --watch\",\"test:node:watch\":\"NODE_ENV=test TEST_ENV=node node_modules/.bin/jest --watch\",\"test:regression\":\"npm run build && node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve' --local\",\"test:regression:browserstack:prod\":\"bash scripts/browserstack_prod.sh\",\"test:regression:browserstack:beta\":\"bash scripts/browserstack_beta.sh\",\"build\":\"NODE_ENV=production ./node_modules/.bin/webpack -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 ./node_modules/.bin/webpack -p && npm run build:node && npm run build:noop\",\"build:node\":\"TARGET=node NODE_ENV=production ./node_modules/.bin/webpack -p\",\"build:noop\":\"NODE_ENV=production ./node_modules/.bin/webpack --config webpack.noop.config.js -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 ./node_modules/.bin/webpack --config webpack.noop.config.js -p\",\"deploy:canary-tier-1\":\"bash ./build_scripts/deploy_canary_tier_1.sh\",\"deploy:canary-tier-1:noop\":\"bash ./build_scripts/noop_deploy_canary_tier_1.sh\",\"deploy:canary-tier-2\":\"bash ./build_scripts/deploy_canary_tier_2.sh\",\"deploy:production\":\"bash ./build_scripts/deploy_production.sh\",\"profile\":\"webpack --profile --json > stats.json\",\"analyze\":\"webpack-bundle-analyzer stats.json /dist\",\"preversion\":\"npm run build && npm run test\",\"demo\":\"node ./test/demo/index.node.js\"},\"bugs\":\"https://github.com/ProdPerfect/prodperfect-keen-tracking.js/issues\",\"author\":{\"name\":\"ProdPerfect, Inc.\",\"url\":\"https://www.prodperfect.com\"},\"upstreamAuthor\":\"Keen IO <team@keen.io> (https://keen.io/)\",\"contributors\":[\"Dustin Larimer <dustin@keen.io> (https://github.com/dustinlarimer)\",\"Eric Anderson <eric@keen.io> (https://github.com/aroc)\",\"Joe Wegner <joe@keen.io> (http://www.wegnerdesign.com)\",\"Alex Kleissner <alex@keen.io> (https://github.com/hex337)\",\"Adam Kasprowicz <adam.kasprowicz@keen.io> (https://github.com/adamkasprowicz)\"],\"license\":\"MIT\",\"dependencies\":{\"component-emitter\":\"^1.2.0\",\"js-cookie\":\"^2.2.1\",\"keen-core\":\"^0.1.3\",\"promise-polyfill\":\"^8.0.0\",\"whatwg-fetch\":\"^2.0.4\"},\"devDependencies\":{\"@babel/cli\":\"^7.0.0\",\"@babel/core\":\"^7.0.0\",\"@babel/plugin-proposal-class-properties\":\"^7.0.0\",\"@babel/plugin-proposal-decorators\":\"^7.0.0\",\"@babel/plugin-proposal-do-expressions\":\"^7.0.0\",\"@babel/plugin-proposal-export-default-from\":\"^7.0.0\",\"@babel/plugin-proposal-export-namespace-from\":\"^7.0.0\",\"@babel/plugin-proposal-function-bind\":\"^7.0.0\",\"@babel/plugin-proposal-function-sent\":\"^7.0.0\",\"@babel/plugin-proposal-json-strings\":\"^7.0.0\",\"@babel/plugin-proposal-logical-assignment-operators\":\"^7.0.0\",\"@babel/plugin-proposal-nullish-coalescing-operator\":\"^7.0.0\",\"@babel/plugin-proposal-numeric-separator\":\"^7.0.0\",\"@babel/plugin-proposal-object-rest-spread\":\"^7.0.0\",\"@babel/plugin-proposal-optional-chaining\":\"^7.0.0\",\"@babel/plugin-proposal-pipeline-operator\":\"^7.0.0\",\"@babel/plugin-proposal-throw-expressions\":\"^7.0.0\",\"@babel/plugin-syntax-dynamic-import\":\"^7.0.0\",\"@babel/plugin-syntax-import-meta\":\"^7.0.0\",\"@babel/polyfill\":\"^7.0.0\",\"@babel/preset-env\":\"^7.0.0\",\"babel-jest\":\"^24.7.1\",\"babel-loader\":\"^8.0.5\",\"babel-plugin-transform-object-rest-spread\":\"^6.26.0\",\"babel-polyfill\":\"^6.26.0\",\"eslint\":\"^5.16.0\",\"eslint-config-airbnb\":\"^17.1.0\",\"eslint-loader\":\"^2.1.2\",\"eslint-plugin-import\":\"^2.17.2\",\"eslint-plugin-jsx-a11y\":\"^6.2.1\",\"eslint-plugin-react\":\"^7.12.4\",\"gulp\":\"^4.0.1\",\"gulp-awspublish\":\"^4.0.0\",\"gulp-connect\":\"^5.7.0\",\"gulp-rename\":\"^1.2.2\",\"gulp-replace\":\"^0.5.3\",\"html-loader\":\"^0.5.5\",\"html-webpack-plugin\":\"^3.2.0\",\"http-server\":\"^0.11.1\",\"jest\":\"^24.7.1\",\"jest-fetch-mock\":\"^1.6.5\",\"minimist\":\"^1.2.0\",\"nock\":\"^9.2.6\",\"regenerator-runtime\":\"^0.11.1\",\"replace-in-file\":\"^3.4.0\",\"testcafe\":\"^1.1.3\",\"testcafe-browser-provider-browserstack\":\"^1.3.0\",\"testcafe-browser-provider-puppeteer\":\"^1.4.0\",\"testcafe-browser-provider-saucelabs\":\"^1.7.0\",\"url-parse\":\"^1.4.3\",\"webpack\":\"^4.30.0\",\"webpack-bundle-analyzer\":\"^3.3.2\",\"webpack-cli\":\"^3.3.1\",\"webpack-dev-server\":\"^3.3.1\",\"xhr-mock\":\"^2.3.2\"}}");
+module.exports = JSON.parse("{\"name\":\"prodperfect-keen-tracking\",\"version\":\"2.0.23\",\"upstreamVersion\":\"4.0.2\",\"description\":\"ProdPerfect fork of the Data Collection SDK for Keen IO\",\"main\":\"dist/node/keen-tracking.js\",\"browser\":\"dist/keen-tracking.js\",\"repository\":{\"type\":\"git\",\"url\":\"https://github.com/ProdPerfect/prodperfect-keen-tracking.js.git\"},\"scripts\":{\"start\":\"NODE_ENV=development webpack-dev-server\",\"test\":\"NODE_ENV=test node_modules/.bin/jest && NODE_ENV=test TEST_ENV=node node_modules/.bin/jest\",\"test:node\":\"NODE_ENV=test TEST_ENV=node node_modules/.bin/jest\",\"test:watch\":\"NODE_ENV=test node_modules/.bin/jest --watch\",\"test:node:watch\":\"NODE_ENV=test TEST_ENV=node node_modules/.bin/jest --watch\",\"test:regression\":\"npm run build && node_modules/.bin/testcafe chrome test/testcafe/regression-tests.js --app 'node_modules/.bin/gulp serve' --local\",\"test:regression:browserstack:prod\":\"bash scripts/browserstack_prod.sh\",\"test:regression:browserstack:beta\":\"bash scripts/browserstack_beta.sh\",\"build\":\"NODE_ENV=production ./node_modules/.bin/webpack -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 ./node_modules/.bin/webpack -p && npm run build:node && npm run build:noop\",\"build:node\":\"TARGET=node NODE_ENV=production ./node_modules/.bin/webpack -p\",\"build:noop\":\"NODE_ENV=production ./node_modules/.bin/webpack --config webpack.noop.config.js -p && NODE_ENV=production OPTIMIZE_MINIMIZE=1 ./node_modules/.bin/webpack --config webpack.noop.config.js -p\",\"deploy:canary-tier-1\":\"bash ./build_scripts/deploy_canary_tier_1.sh\",\"deploy:canary-tier-1:noop\":\"bash ./build_scripts/noop_deploy_canary_tier_1.sh\",\"deploy:canary-tier-2\":\"bash ./build_scripts/deploy_canary_tier_2.sh\",\"deploy:production\":\"bash ./build_scripts/deploy_production.sh\",\"profile\":\"webpack --profile --json > stats.json\",\"analyze\":\"webpack-bundle-analyzer stats.json /dist\",\"preversion\":\"npm run build && npm run test\",\"demo\":\"node ./test/demo/index.node.js\"},\"bugs\":\"https://github.com/ProdPerfect/prodperfect-keen-tracking.js/issues\",\"author\":{\"name\":\"ProdPerfect, Inc.\",\"url\":\"https://www.prodperfect.com\"},\"upstreamAuthor\":\"Keen IO <team@keen.io> (https://keen.io/)\",\"contributors\":[\"Dustin Larimer <dustin@keen.io> (https://github.com/dustinlarimer)\",\"Eric Anderson <eric@keen.io> (https://github.com/aroc)\",\"Joe Wegner <joe@keen.io> (http://www.wegnerdesign.com)\",\"Alex Kleissner <alex@keen.io> (https://github.com/hex337)\",\"Adam Kasprowicz <adam.kasprowicz@keen.io> (https://github.com/adamkasprowicz)\"],\"license\":\"MIT\",\"dependencies\":{\"component-emitter\":\"^1.2.0\",\"js-cookie\":\"^2.2.1\",\"keen-core\":\"^0.1.3\",\"promise-polyfill\":\"^8.0.0\",\"unique-selector\":\"^0.5.0\",\"whatwg-fetch\":\"^2.0.4\"},\"devDependencies\":{\"@babel/cli\":\"^7.0.0\",\"@babel/core\":\"^7.0.0\",\"@babel/plugin-proposal-class-properties\":\"^7.0.0\",\"@babel/plugin-proposal-decorators\":\"^7.0.0\",\"@babel/plugin-proposal-do-expressions\":\"^7.0.0\",\"@babel/plugin-proposal-export-default-from\":\"^7.0.0\",\"@babel/plugin-proposal-export-namespace-from\":\"^7.0.0\",\"@babel/plugin-proposal-function-bind\":\"^7.0.0\",\"@babel/plugin-proposal-function-sent\":\"^7.0.0\",\"@babel/plugin-proposal-json-strings\":\"^7.0.0\",\"@babel/plugin-proposal-logical-assignment-operators\":\"^7.0.0\",\"@babel/plugin-proposal-nullish-coalescing-operator\":\"^7.0.0\",\"@babel/plugin-proposal-numeric-separator\":\"^7.0.0\",\"@babel/plugin-proposal-object-rest-spread\":\"^7.0.0\",\"@babel/plugin-proposal-optional-chaining\":\"^7.0.0\",\"@babel/plugin-proposal-pipeline-operator\":\"^7.0.0\",\"@babel/plugin-proposal-throw-expressions\":\"^7.0.0\",\"@babel/plugin-syntax-dynamic-import\":\"^7.0.0\",\"@babel/plugin-syntax-import-meta\":\"^7.0.0\",\"@babel/polyfill\":\"^7.0.0\",\"@babel/preset-env\":\"^7.0.0\",\"babel-jest\":\"^24.7.1\",\"babel-loader\":\"^8.0.5\",\"babel-plugin-transform-object-rest-spread\":\"^6.26.0\",\"babel-polyfill\":\"^6.26.0\",\"eslint\":\"^5.16.0\",\"eslint-config-airbnb\":\"^17.1.0\",\"eslint-loader\":\"^2.1.2\",\"eslint-plugin-import\":\"^2.17.2\",\"eslint-plugin-jsx-a11y\":\"^6.2.1\",\"eslint-plugin-react\":\"^7.12.4\",\"gulp\":\"^4.0.1\",\"gulp-awspublish\":\"^4.0.0\",\"gulp-connect\":\"^5.7.0\",\"gulp-rename\":\"^1.2.2\",\"gulp-replace\":\"^0.5.3\",\"html-loader\":\"^0.5.5\",\"html-webpack-plugin\":\"^3.2.0\",\"http-server\":\"^0.11.1\",\"jest\":\"^24.7.1\",\"jest-fetch-mock\":\"^1.6.5\",\"minimist\":\"^1.2.0\",\"nock\":\"^9.2.6\",\"regenerator-runtime\":\"^0.11.1\",\"replace-in-file\":\"^3.4.0\",\"testcafe\":\"^1.1.3\",\"testcafe-browser-provider-browserstack\":\"^1.3.0\",\"testcafe-browser-provider-puppeteer\":\"^1.4.0\",\"testcafe-browser-provider-saucelabs\":\"^1.7.0\",\"url-parse\":\"^1.4.3\",\"webpack\":\"^4.30.0\",\"webpack-bundle-analyzer\":\"^3.3.2\",\"webpack-cli\":\"^3.3.1\",\"webpack-dev-server\":\"^3.3.1\",\"xhr-mock\":\"^2.3.2\"}}");
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4030,7 +4101,7 @@ var Sampler = /*#__PURE__*/function () {
 exports["default"] = Sampler;
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4072,7 +4143,7 @@ function getDocumentDescription() {
 }
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4095,7 +4166,7 @@ function getDatetimeIndex(input) {
 }
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4142,7 +4213,7 @@ function getDomainName(url) {
 }
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4157,7 +4228,7 @@ var _getDomNodePath = __webpack_require__(15);
 
 var _getBasicDomNodeProfile = _interopRequireDefault(__webpack_require__(16));
 
-var _getNParents = __webpack_require__(41);
+var _getNParents = __webpack_require__(51);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -4194,7 +4265,560 @@ function getDomNodeProfile(el) {
 }
 
 /***/ }),
-/* 40 */
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = unique;
+
+var _getID = __webpack_require__(42);
+
+var _getClasses = __webpack_require__(43);
+
+var _getCombinations = __webpack_require__(44);
+
+var _getAttributes = __webpack_require__(45);
+
+var _getNthChild = __webpack_require__(46);
+
+var _getTag = __webpack_require__(47);
+
+var _isUnique = __webpack_require__(48);
+
+var _getParents = __webpack_require__(49);
+
+/**
+ * Returns all the selectors of the elmenet
+ * @param  { Object } element
+ * @return { Object }
+ */
+/**
+ * Expose `unique`
+ */
+
+function getAllSelectors(el, selectors, attributesToIgnore) {
+  var funcs = {
+    'Tag': _getTag.getTag,
+    'NthChild': _getNthChild.getNthChild,
+    'Attributes': function Attributes(elem) {
+      return (0, _getAttributes.getAttributes)(elem, attributesToIgnore);
+    },
+    'Class': _getClasses.getClassSelectors,
+    'ID': _getID.getID
+  };
+
+  return selectors.reduce(function (res, next) {
+    res[next] = funcs[next](el);
+    return res;
+  }, {});
+}
+
+/**
+ * Tests uniqueNess of the element inside its parent
+ * @param  { Object } element
+ * @param { String } Selectors
+ * @return { Boolean }
+ */
+function testUniqueness(element, selector) {
+  var parentNode = element.parentNode;
+
+  var elements = parentNode.querySelectorAll(selector);
+  return elements.length === 1 && elements[0] === element;
+}
+
+/**
+ * Tests all selectors for uniqueness and returns the first unique selector.
+ * @param  { Object } element
+ * @param  { Array } selectors
+ * @return { String }
+ */
+function getFirstUnique(element, selectors) {
+  return selectors.find(testUniqueness.bind(null, element));
+}
+
+/**
+ * Checks all the possible selectors of an element to find one unique and return it
+ * @param  { Object } element
+ * @param  { Array } items
+ * @param  { String } tag
+ * @return { String }
+ */
+function getUniqueCombination(element, items, tag) {
+  var combinations = (0, _getCombinations.getCombinations)(items, 3),
+      firstUnique = getFirstUnique(element, combinations);
+
+  if (Boolean(firstUnique)) {
+    return firstUnique;
+  }
+
+  if (Boolean(tag)) {
+    combinations = combinations.map(function (combination) {
+      return tag + combination;
+    });
+    firstUnique = getFirstUnique(element, combinations);
+
+    if (Boolean(firstUnique)) {
+      return firstUnique;
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Returns a uniqueSelector based on the passed options
+ * @param  { DOM } element
+ * @param  { Array } options
+ * @return { String }
+ */
+function getUniqueSelector(element, selectorTypes, attributesToIgnore, excludeRegex) {
+  var foundSelector = void 0;
+
+  var elementSelectors = getAllSelectors(element, selectorTypes, attributesToIgnore);
+
+  if (excludeRegex && excludeRegex instanceof RegExp) {
+    elementSelectors.ID = excludeRegex.test(elementSelectors.ID) ? null : elementSelectors.ID;
+    elementSelectors.Class = elementSelectors.Class.filter(function (className) {
+      return !excludeRegex.test(className);
+    });
+  }
+
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = selectorTypes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var selectorType = _step.value;
+      var ID = elementSelectors.ID,
+          Tag = elementSelectors.Tag,
+          Classes = elementSelectors.Class,
+          Attributes = elementSelectors.Attributes,
+          NthChild = elementSelectors.NthChild;
+
+      switch (selectorType) {
+        case 'ID':
+          if (Boolean(ID) && testUniqueness(element, ID)) {
+            return ID;
+          }
+          break;
+
+        case 'Tag':
+          if (Boolean(Tag) && testUniqueness(element, Tag)) {
+            return Tag;
+          }
+          break;
+
+        case 'Class':
+          if (Boolean(Classes) && Classes.length) {
+            foundSelector = getUniqueCombination(element, Classes, Tag);
+            if (foundSelector) {
+              return foundSelector;
+            }
+          }
+          break;
+
+        case 'Attributes':
+          if (Boolean(Attributes) && Attributes.length) {
+            foundSelector = getUniqueCombination(element, Attributes, Tag);
+            if (foundSelector) {
+              return foundSelector;
+            }
+          }
+          break;
+
+        case 'NthChild':
+          if (Boolean(NthChild)) {
+            return NthChild;
+          }
+      }
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  return '*';
+}
+
+/**
+ * Generate unique CSS selector for given DOM element
+ *
+ * @param {Element} el
+ * @return {String}
+ * @api private
+ */
+
+function unique(el) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var _options$selectorType = options.selectorTypes,
+      selectorTypes = _options$selectorType === undefined ? ['ID', 'Class', 'Tag', 'NthChild'] : _options$selectorType,
+      _options$attributesTo = options.attributesToIgnore,
+      attributesToIgnore = _options$attributesTo === undefined ? ['id', 'class', 'length'] : _options$attributesTo,
+      _options$excludeRegex = options.excludeRegex,
+      excludeRegex = _options$excludeRegex === undefined ? null : _options$excludeRegex;
+
+  var allSelectors = [];
+  var parents = (0, _getParents.getParents)(el);
+
+  var _iteratorNormalCompletion2 = true;
+  var _didIteratorError2 = false;
+  var _iteratorError2 = undefined;
+
+  try {
+    for (var _iterator2 = parents[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+      var elem = _step2.value;
+
+      var selector = getUniqueSelector(elem, selectorTypes, attributesToIgnore, excludeRegex);
+      if (Boolean(selector)) {
+        allSelectors.push(selector);
+      }
+    }
+  } catch (err) {
+    _didIteratorError2 = true;
+    _iteratorError2 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion2 && _iterator2.return) {
+        _iterator2.return();
+      }
+    } finally {
+      if (_didIteratorError2) {
+        throw _iteratorError2;
+      }
+    }
+  }
+
+  var selectors = [];
+  var _iteratorNormalCompletion3 = true;
+  var _didIteratorError3 = false;
+  var _iteratorError3 = undefined;
+
+  try {
+    for (var _iterator3 = allSelectors[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+      var it = _step3.value;
+
+      selectors.unshift(it);
+      var _selector = selectors.join(' > ');
+      if ((0, _isUnique.isUnique)(el, _selector)) {
+        return _selector;
+      }
+    }
+  } catch (err) {
+    _didIteratorError3 = true;
+    _iteratorError3 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion3 && _iterator3.return) {
+        _iterator3.return();
+      }
+    } finally {
+      if (_didIteratorError3) {
+        throw _iteratorError3;
+      }
+    }
+  }
+
+  return null;
+}
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getID = getID;
+/**
+ * Returns the Tag of the element
+ * @param  { Object } element
+ * @return { String }
+ */
+function getID(el) {
+  var id = el.getAttribute('id');
+
+  if (id !== null && id !== '') {
+    // if the ID starts with a number or contains ":" selecting with a hash will cause a DOMException
+    return id.match(/(?:^\d|:)/) ? '[id="' + id + '"]' : '#' + id;
+  }
+  return null;
+}
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getClasses = getClasses;
+exports.getClassSelectors = getClassSelectors;
+/**
+ * Get class names for an element
+ *
+ * @pararm { Element } el
+ * @return { Array }
+ */
+function getClasses(el) {
+  if (!el.hasAttribute('class')) {
+    return [];
+  }
+
+  try {
+    var classList = Array.prototype.slice.call(el.classList);
+
+    // return only the valid CSS selectors based on RegEx
+    return classList.filter(function (item) {
+      return !/^[a-z_-][a-z\d_-]*$/i.test(item) ? null : item;
+    });
+  } catch (e) {
+    var className = el.getAttribute('class');
+
+    // remove duplicate and leading/trailing whitespaces
+    className = className.trim().replace(/\s+/g, ' ');
+
+    // split into separate classnames
+    return className.split(' ');
+  }
+}
+
+/**
+ * Returns the Class selectors of the element
+ * @param  { Object } element
+ * @return { Array }
+ */
+function getClassSelectors(el) {
+  var classList = getClasses(el).filter(Boolean);
+  return classList.map(function (cl) {
+    return '.' + cl;
+  });
+}
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getCombinations = getCombinations;
+/**
+ * Recursively combinate items.
+ * @param  { Array } result
+ * @param  { Array } items
+ * @param  { Array } data
+ * @param  { Number } start
+ * @param  { Number } end
+ * @param  { Number } index
+ * @param  { Number } k
+ */
+function kCombinations(result, items, data, start, end, index, k) {
+    if (index === k) {
+        result.push(data.slice(0, index).join(''));
+        return;
+    }
+
+    for (var i = start; i <= end && end - i + 1 >= k - index; ++i) {
+        data[index] = items[i];
+        kCombinations(result, items, data, i + 1, end, index + 1, k);
+    }
+}
+
+/**
+ * Returns all the possible selector combinations
+ * @param  { Array } items
+ * @param  { Number } k
+ * @return { Array }
+ */
+function getCombinations(items, k) {
+    var result = [],
+        n = items.length,
+        data = [];
+
+    for (var l = 1; l <= k; ++l) {
+        kCombinations(result, items, data, 0, n - 1, 0, l);
+    }
+
+    return result;
+}
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getAttributes = getAttributes;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+/**
+ * Returns the Attribute selectors of the element
+ * @param  { DOM Element } element
+ * @param  { Array } array of attributes to ignore
+ * @return { Array }
+ */
+function getAttributes(el) {
+  var attributesToIgnore = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ['id', 'class', 'length'];
+  var attributes = el.attributes;
+
+  var attrs = [].concat(_toConsumableArray(attributes));
+
+  return attrs.reduce(function (sum, next) {
+    if (!(attributesToIgnore.indexOf(next.nodeName) > -1)) {
+      sum.push('[' + next.nodeName + '="' + next.value + '"]');
+    }
+    return sum;
+  }, []);
+}
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getNthChild = getNthChild;
+
+var _isElement = __webpack_require__(17);
+
+/**
+ * Returns the selectors based on the position of the element relative to its siblings
+ * @param  { Object } element
+ * @return { Array }
+ */
+function getNthChild(element) {
+  var counter = 0;
+  var k = void 0;
+  var sibling = void 0;
+  var parentNode = element.parentNode;
+
+
+  if (Boolean(parentNode)) {
+    var childNodes = parentNode.childNodes;
+
+    var len = childNodes.length;
+    for (k = 0; k < len; k++) {
+      sibling = childNodes[k];
+      if ((0, _isElement.isElement)(sibling)) {
+        counter++;
+        if (sibling === element) {
+          return ':nth-child(' + counter + ')';
+        }
+      }
+    }
+  }
+  return null;
+}
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getTag = getTag;
+/**
+ * Returns the Tag of the element
+ * @param  { Object } element
+ * @return { String }
+ */
+function getTag(el) {
+  return el.tagName.toLowerCase().replace(/:/g, '\\:');
+}
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isUnique = isUnique;
+/**
+ * Checks if the selector is unique
+ * @param  { Object } element
+ * @param  { String } selector
+ * @return { Array }
+ */
+function isUnique(el, selector) {
+  if (!Boolean(selector)) return false;
+  var elems = el.ownerDocument.querySelectorAll(selector);
+  return elems.length === 1 && elems[0] === el;
+}
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getParents = getParents;
+
+var _isElement = __webpack_require__(17);
+
+/**
+ * Returns all the element and all of its parents
+ * @param { DOM Element }
+ * @return { Array of DOM elements }
+ */
+function getParents(el) {
+  var parents = [];
+  var currentElement = el;
+  while ((0, _isElement.isElement)(currentElement)) {
+    parents.push(currentElement);
+    currentElement = currentElement.parentNode;
+  }
+
+  return parents;
+}
+
+/***/ }),
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4223,7 +4847,7 @@ function getDomNodeAttributes(el, filter) {
 }
 
 /***/ }),
-/* 41 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4259,7 +4883,7 @@ function getNParents(element) {
 }
 
 /***/ }),
-/* 42 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4314,7 +4938,7 @@ function getWindowHeight() {
 }
 
 /***/ }),
-/* 43 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4344,7 +4968,7 @@ function getUniqueId() {
 }
 
 /***/ }),
-/* 44 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4355,7 +4979,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.cookie = void 0;
 
-var _jsCookie = _interopRequireDefault(__webpack_require__(45));
+var _jsCookie = _interopRequireDefault(__webpack_require__(55));
 
 var _extend = _interopRequireDefault(__webpack_require__(1));
 
@@ -4437,7 +5061,7 @@ cookie.prototype.enabled = function () {
 };
 
 /***/ }),
-/* 45 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -4610,7 +5234,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 46 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4870,7 +5494,7 @@ function str_serialize(result, key, value) {
 }
 
 /***/ }),
-/* 47 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
